@@ -11,9 +11,9 @@ import java.io.IOException;
 
 public class AccesslogProvider extends AbstractFieldJsonProvider<IAccessEvent> implements FieldNamesAware<LogstashFieldNames> {
 
-    private final static String TRACE_ID = "trace_id";
-    private final static String TRACE_FLAGS = "trace_flags";
-    private final static String SPAN_ID = "span_id";
+    protected final static String TRACE_ID = "trace_id";
+    protected final static String TRACE_FLAGS = "trace_flags";
+    protected final static String SPAN_ID = "span_id";
 
     @Override
     public void setFieldNames(LogstashFieldNames fieldNames) {

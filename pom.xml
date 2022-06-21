@@ -10,12 +10,13 @@
     </parent>
     <groupId>no.idporten.logging</groupId>
     <artifactId>idporten-access-log-spring-boot-starter</artifactId>
-    <version>0.0.3-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
     <name>idporten-access-log-starter</name>
     <description>ID-porten access logg spring boot starter for Tomcat</description>
     <properties>
         <java.version>17</java.version>
         <logstash.logback.version>7.2</logstash.logback.version>
+        <tomcat.version>9.0.64</tomcat.version>
     </properties>
     <dependencies>
         <dependency>
@@ -27,7 +28,7 @@
         <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-catalina</artifactId>
-            <version>8.0.36</version>
+            <version>${tomcat.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -35,7 +36,6 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-<!--            <version>1.2.11</version>-->
             <scope>provided</scope>
         </dependency>
 
@@ -43,17 +43,18 @@
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
             <version>${logstash.logback.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-access</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
     <build>

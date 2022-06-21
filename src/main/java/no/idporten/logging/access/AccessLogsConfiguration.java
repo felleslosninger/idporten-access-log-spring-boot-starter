@@ -2,7 +2,6 @@ package no.idporten.logging.access;
 
 import ch.qos.logback.access.tomcat.LogbackValve;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
@@ -23,14 +22,5 @@ public class AccessLogsConfiguration {
             factory.addContextValves(logbackValve);
         };
     }
-
-    @Bean
-    @ConditionalOnBean
-    public String logging(){
-        LoggerFactory.getLogger(AccessLogsConfiguration.class).debug("AccessLogsConfiguration started..." );
-        return "found";
-    }
-
-
 }
 
