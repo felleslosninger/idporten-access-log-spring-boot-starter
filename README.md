@@ -4,7 +4,7 @@
 [![Latest Stable Version](https://img.shields.io/github/v/release/felleslosninger/idporten-access-log-spring-boot-starter?display_name=tag)](https://github.com/felleslosninger/idporten-access-log-spring-boot-starter/releases)
 
 
-This spring boot starter is a library for Tomcat access log (v9) for Spring Boot project as JSON.
+This spring boot starter is a library for Tomcat access log (version 9.0.X Tomcat) for Spring Boot project as JSON.
 See src/main/resources/logback-access.yaml for the syntax of logging.
 
 ## Requirements
