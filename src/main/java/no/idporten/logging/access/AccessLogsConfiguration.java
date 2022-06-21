@@ -14,7 +14,7 @@ public class AccessLogsConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public WebServerFactoryCustomizer<TomcatServletWebServerFactory> accessLogsCustomizer() {
-        LoggerFactory.getLogger(AccessLogsConfiguration.class).debug("Initialize accessLogsCustomizer" );
+        LoggerFactory.getLogger(AccessLogsConfiguration.class).info("Initialize accessLogsCustomizer for Tomcat Access Logging as JSON" );
         return factory -> {
             var logbackValve = new LogbackValve();
             logbackValve.setFilename("logback-access.xml");
