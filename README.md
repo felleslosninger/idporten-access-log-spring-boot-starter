@@ -28,7 +28,7 @@ The library can be imported through maven with:
 <dependency>
     <groupId>no.idporten.logging</groupId>
     <artifactId>idporten-access-log-spring-boot-starter</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.1.0</version>
 </dependency>
 ```
 
@@ -38,3 +38,9 @@ The library is configured through the application.yml file.
 accesslog-application-name: my-application-name
 ```
 This property must be on root since only can import properties in logback-access.xml, no spring properties.
+
+To load the lib you must add e.g.
+```
+@Import({ AccessLogsConfiguration.class }) 
+```
+In your SpringBootApplication class.
