@@ -16,7 +16,7 @@
     <properties>
         <java.version>17</java.version>
         <logstash.logback.version>7.2</logstash.logback.version>
-        <tomcat.version>9.0.64</tomcat.version>
+        <tomcat.version>10.0.22</tomcat.version>
     </properties>
     <dependencies>
         <dependency>
