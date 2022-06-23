@@ -25,7 +25,7 @@ public class AccesslogProvider extends AbstractFieldJsonProvider<IAccessEvent> i
         String traceparent = iAccessEvent.getRequestHeader("traceparent");
 
         if (traceparent == null || !traceparent.contains("-") || traceparent.split("-").length != 4) {
-            LoggerFactory.getLogger(AccesslogProvider.class).info("traceparent not found" + iAccessEvent);
+            LoggerFactory.getLogger(AccesslogProvider.class).debug("traceparent not found" + iAccessEvent);
             return;
         }
         String[] split = traceparent.split("-");
