@@ -11,7 +11,7 @@ jobs:
   call-workflow-release:
     uses: felleslosninger/eid-github-workflows/.github/workflows/maven-release-lib.yml@main
     with:
-      java-version: 17
+      java-version: 11
     secrets:
       packages-user: ${{ secrets.CREATE_PACKAGES_USER }}
       packages-token: ${{ secrets.CREATE_PACKAGES_TOKEN }}
