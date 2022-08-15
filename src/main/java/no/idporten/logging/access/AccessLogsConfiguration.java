@@ -8,7 +8,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 public class AccessLogsConfiguration {
@@ -25,11 +25,11 @@ public class AccessLogsConfiguration {
     }
 
     @Bean
-    public FilterRegistrationBean filterRegistrationBean() {
-        FilterRegistrationBean filterBean = new FilterRegistrationBean();
+    public FilterRegistrationBean<ResponseFilter> filterRegistrationBean() {
+        FilterRegistrationBean<ResponseFilter> filterBean = new FilterRegistrationBean<>();
         filterBean.setFilter(new ResponseFilter());
-        filterBean.setUrlPatterns(Arrays.asList("*"));
-        filterBean.setOrder(Integer.MAX_VALUE); // Want this filter last in line
+        filterBean.setUrlPatterns(List.of("*"));
+        filterBean.setOrder(Integer.MAX_VALUE); // Want this filter last of filters in case the other filters do something with the response
         LoggerFactory.getLogger(AccessLogsConfiguration.class).info(ResponseFilter.class.getName() + " order: " + filterBean.getOrder());
         return filterBean;
     }
