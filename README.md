@@ -5,7 +5,7 @@
 
 
 This spring boot starter is a library for Tomcat access log (version 9.0.X Tomcat) for Spring Boot project as JSON. Not tested on Tomcat 10 (will most likely fail on Tomcat 10).
-See [src/main/resources/logback-access.yaml for the syntax of logging].
+See (src/main/resources/logback-access.yaml for the syntax of logging).
 
 ## Requirements
 
