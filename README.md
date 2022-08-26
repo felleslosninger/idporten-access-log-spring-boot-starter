@@ -11,7 +11,7 @@ See [src/main/resources/logback-access.xml](src/main/resources/logback-access.xm
 
 To build and run the application you need:
 
-* JDK 17
+* JDK 11
 * Maven
 
 ## Build library
