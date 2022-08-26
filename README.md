@@ -11,7 +11,7 @@ See [src/main/resources/logback-access.xml](src/main/resources/logback-access.xm
 
 To build and run the application you need:
 
-* JDK 17
+* JDK 11
 * Maven
 
 ## Build library
@@ -23,12 +23,12 @@ mvn clean install
 
 
 ## Usage
-The library can be imported through maven with:
+The library can be imported through maven with (see latest version under [releases](https://github.com/felleslosninger/idporten-access-log-spring-boot-starter/releases)):
 ```xml
 <dependency>
     <groupId>no.idporten.logging</groupId>
     <artifactId>idporten-access-log-spring-boot-starter</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.5</version>
 </dependency>
 ```
 
