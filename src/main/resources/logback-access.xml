@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="false">
     <property resource="application.yaml" />
+    <property resource="application.yml" />
     <appender name="accessJsonConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="net.logstash.logback.encoder.AccessEventCompositeJsonEncoder">
 
