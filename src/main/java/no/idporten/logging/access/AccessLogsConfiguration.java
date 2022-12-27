@@ -2,6 +2,7 @@ package no.idporten.logging.access;
 
 import ch.qos.logback.access.tomcat.LogbackValve;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -12,10 +13,19 @@ import java.util.List;
 
 @Configuration
 public class AccessLogsConfiguration {
+    
+    static AccessLogsProperties properties = null;
+    @Autowired
+    AccessLogsProperties props;
+
+    public static AccessLogsProperties getProperties(){
+        return properties;
+    }
 
     @Bean
     public WebServerFactoryCustomizer<TomcatServletWebServerFactory> accessLogsCustomizer() {
-        LoggerFactory.getLogger(AccessLogsConfiguration.class).info("Initialize accessLogsCustomizer for Tomcat Access Logging as JSON" );
+        LoggerFactory.getLogger(AccessLogsConfiguration.class).info("Initialize accessLogsCustomizer for Tomcat Access Logging as JSON" ); 
+        properties = props; 
         return factory -> {
             var logbackValve = new LogbackValve();
             logbackValve.setFilename("logback-access.xml");

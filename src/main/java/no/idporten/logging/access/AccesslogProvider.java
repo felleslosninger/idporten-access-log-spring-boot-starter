@@ -14,6 +14,8 @@ public class AccesslogProvider extends AbstractFieldJsonProvider<IAccessEvent> i
     protected final static String TRACE_ID = "trace_id";
     protected final static String TRACE_FLAGS = "trace_flags";
     protected final static String SPAN_ID = "span_id";
+    protected final static String APP_NAME = "application";
+    protected final static String APP_ENV = "environment";
 
     @Override
     public void setFieldNames(LogstashFieldNames fieldNames) {
@@ -22,7 +24,19 @@ public class AccesslogProvider extends AbstractFieldJsonProvider<IAccessEvent> i
     // https://www.w3.org/TR/trace-context/#traceparent-header-field-values
     @Override
     public void writeTo(JsonGenerator jsonGenerator, IAccessEvent iAccessEvent) throws IOException {
-        String traceparent = iAccessEvent.getRequestHeader("traceparent");
+        String traceparent = iAccessEvent.getRequestHeader("traceparent");       
+        String appname = AccessLogsConfiguration.getProperties() != null ? AccessLogsConfiguration.getProperties().getName() : null;
+        if (appname != null && appname.length() > 0){
+            jsonGenerator.writeStringField(APP_NAME, appname);
+        }else{
+            jsonGenerator.writeStringField(APP_NAME, "-");
+        }
+        String appenv = AccessLogsConfiguration.getProperties() != null ? AccessLogsConfiguration.getProperties().getEnvironment() : null;
+        if (appenv != null && appenv.length() > 0){
+            jsonGenerator.writeStringField(APP_ENV, appenv);
+        }else{
+            jsonGenerator.writeStringField(APP_ENV, "-");
+        }
 
         if (traceparent == null || !traceparent.contains("-") || traceparent.split("-").length != 4) {
             LoggerFactory.getLogger(AccesslogProvider.class).debug("traceparent not found" + iAccessEvent);

@@ -43,6 +43,8 @@ class AccesslogProviderTest {
     public void whenNoTraceparentInHeaderDoNotWriteToLog() throws IOException {
         AccesslogProvider provider = new AccesslogProvider();
         provider.writeTo(generator, event);
-        verify(generator, never()).writeStringField(anyString(), anyString());
+        verify(generator, atMost(2)).writeStringField(anyString(), anyString());
+        verify(generator).writeStringField(eq(AccesslogProvider.APP_ENV), eq("-"));
+        verify(generator).writeStringField(eq(AccesslogProvider.APP_NAME), eq("-"));
     }
 }
