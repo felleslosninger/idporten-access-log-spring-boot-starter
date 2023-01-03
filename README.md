@@ -58,12 +58,13 @@ And you probably already have included these:
 ```
 
 ### Configuration
-The library is configured through the application.yml file.
+The library is configured through the application.yml/yaml file.
 ```yaml
-accesslog-application-name: my-application-name
+spring:
+  application:
+    name: my-application-name
+    environment: current-running-environment
 ```
-This property must be on root since only can import properties in logback-access.xml, no spring properties.
-
 
 ## Troubleshooting
 If you can not see any access logging in IntelliJ, then try Maven->reload project.

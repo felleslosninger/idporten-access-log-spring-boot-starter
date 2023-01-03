@@ -13,7 +13,6 @@
                         "@version" : "1",
                         "@type" : "access",
                         "logtype": "tomcat-access",
-                        "application": "${accesslog-application-name}",
                         "x_forwarded_for": "%header{X-Forwarded-For}",
                         "client_host" : "%clientHost",
                         "remote_user" : "%user",
