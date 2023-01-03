@@ -2,8 +2,6 @@ package no.idporten.logging.access;
 
 import ch.qos.logback.access.tomcat.LogbackValve;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -15,6 +13,7 @@ import java.util.List;
 @Configuration
 public class AccessLogsConfiguration {
     
+    // Static properties to make spring application properties available to AccesslogProvider
     private static AccessLogsProperties properties = null;
 
     public static AccessLogsProperties getProperties(){
