@@ -2,6 +2,7 @@ package no.idporten.logging.access;
 
 import ch.qos.logback.access.tomcat.LogbackValve;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 
 @Configuration
+@EnableConfigurationProperties(AccessLogsProperties.class)
 public class AccessLogsConfiguration {
     
     // Static properties to make spring application properties available to AccesslogProvider
@@ -22,7 +24,7 @@ public class AccessLogsConfiguration {
 
     @Bean
     public WebServerFactoryCustomizer<TomcatServletWebServerFactory> accessLogsCustomizer(AccessLogsProperties props) {
-        LoggerFactory.getLogger(AccessLogsConfiguration.class).info("Initialize accessLogsCustomizer for Tomcat Access Logging as JSON" );         
+        LoggerFactory.getLogger(AccessLogsConfiguration.class).info("Initialize accessLogsCustomizer for Tomcat Access Logging as JSON" ); 
         if(properties == null){
             properties = props;
         } 
