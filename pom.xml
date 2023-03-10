@@ -15,7 +15,7 @@
     <description>ID-porten access logg spring boot starter for Tomcat</description>
     <properties>
         <java.version>11</java.version>
-        <logstash.logback.version>7.2</logstash.logback.version>
+        <logstash.logback.version>7.3</logstash.logback.version>
         <tomcat.version>9.0.70</tomcat.version>
     </properties>
     <dependencies>
