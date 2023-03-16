@@ -82,11 +82,11 @@ public class AccesslogProvider extends AbstractFieldJsonProvider<IAccessEvent> i
                 return;
             }
             String spanId = spanContext.getSpanId();
-            String parentId = spanContext.getTraceFlags().toString();
+            String traceFlags = spanContext.getTraceFlags().asHex();
 
             jsonGenerator.writeStringField(TRACE_ID, traceId);
             jsonGenerator.writeStringField(SPAN_ID, spanId);
-            jsonGenerator.writeStringField(TRACE_FLAGS, parentId);
+            jsonGenerator.writeStringField(TRACE_FLAGS, traceFlags);
 
         } else {
             String message = String.format("traceparent not found as request header: %s or in spanContext: %s", iAccessEvent, Span.current().getSpanContext());
