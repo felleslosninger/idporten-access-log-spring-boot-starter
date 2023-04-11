@@ -17,10 +17,19 @@
     </modules>
 
     <properties>
-        <maven.compiler.release>11</maven.compiler.release>
         <java.version>11</java.version>
+        <maven.compiler.release>11</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
         <logstash.logback.version>7.3</logstash.logback.version>
         <opentelemetry-instrumentation.version>1.24.0</opentelemetry-instrumentation.version>
+        <logback.version>1.2.11</logback.version>
+
+<!--   skadenr     877 88 599 ,2-->
+<!--        LJ70396-->
+
+        <!-- maven plugins -->
         <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
         <maven-resources-plugin.version>3.3.0</maven-resources-plugin.version>
         <maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
@@ -40,12 +49,6 @@
             </dependency>
 
             <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-classic</artifactId>
-                <scope>provided</scope>
-            </dependency>
-
-            <dependency>
                 <groupId>net.logstash.logback</groupId>
                 <artifactId>logstash-logback-encoder</artifactId>
                 <version>${logstash.logback.version}</version>
@@ -54,6 +57,13 @@
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-access</artifactId>
+                <version>${logback.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback.version}</version>
                 <scope>provided</scope>
             </dependency>
         </dependencies>

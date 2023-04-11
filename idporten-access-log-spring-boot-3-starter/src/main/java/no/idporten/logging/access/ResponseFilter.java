@@ -2,8 +2,8 @@ package no.idporten.logging.access;
 
 import org.springframework.web.util.ContentCachingResponseWrapper;
 
-import javax.servlet.*;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class ResponseFilter implements Filter {
@@ -18,7 +18,6 @@ public class ResponseFilter implements Filter {
         ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper((HttpServletResponse) response);
         chain.doFilter(request, responseWrapper);
         responseWrapper.copyBodyToResponse();
-
     }
 
     @Override

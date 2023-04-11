@@ -61,11 +61,10 @@ And you probably already have included these:
 <dependency>
     <groupId>net.logstash.logback</groupId>
     <artifactId>logstash-logback-encoder</artifactId>
-    <version>${logstash.logback.version}</version>
 </dependency>
 <dependency>
-<groupId>io.opentelemetry.instrumentation</groupId>
-<artifactId>opentelemetry-instrumentation-api</artifactId>
+    <groupId>io.opentelemetry.instrumentation</groupId>
+    <artifactId>opentelemetry-instrumentation-api</artifactId>
 </dependency>
 ```
 
