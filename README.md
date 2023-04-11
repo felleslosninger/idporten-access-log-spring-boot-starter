@@ -4,8 +4,8 @@
 [![Latest Stable Version](https://img.shields.io/github/v/release/felleslosninger/idporten-access-log-spring-boot-starter?display_name=tag)](https://github.com/felleslosninger/idporten-access-log-spring-boot-starter/releases)
 
 
-This spring boot starter is a library for Tomcat access log (version 9.0.X Tomcat) for Spring Boot project as JSON. Not tested on Tomcat 10 (will most likely fail on Tomcat 10).
-See [src/main/resources/logback-access.xml](src/main/resources/logback-access.xml) for the syntax of logging.
+This spring boot starter is a library for Tomcat access log (version 9.0.X/10.0.X Tomcat) for Spring Boot project as JSON.
+See [idporten-access-log-spring-boot-3-starter/src/main/resources/logback-access.xml](/idporten-access-log-spring-boot-3-starter/src/main/resources/logback-access.xml) for the syntax of logging.
 
 ## Requirements
 
@@ -28,9 +28,18 @@ The library can be imported through maven with (see latest version under [releas
 <dependency>
     <groupId>no.idporten.logging</groupId>
     <artifactId>idporten-access-log-spring-boot-starter</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
 </dependency>
 ```
+Or, for Spring Boot 3:
+```xml
+<dependency>
+    <groupId>no.idporten.logging</groupId>
+    <artifactId>idporten-access-log-spring-boot-3-starter</artifactId>
+    <version>1.1.2</version>
+</dependency>
+```
+
 
 Also needs dependency:
 ```xml
