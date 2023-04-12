@@ -28,7 +28,7 @@ The library can be imported through maven with (see latest version under [releas
 <dependency>
     <groupId>no.idporten.logging</groupId>
     <artifactId>idporten-access-log-spring-boot-starter</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.1</version>
 </dependency>
 ```
 Or, for Spring Boot 3:
@@ -36,7 +36,7 @@ Or, for Spring Boot 3:
 <dependency>
     <groupId>no.idporten.logging</groupId>
     <artifactId>idporten-access-log-spring-boot-3-starter</artifactId>
-    <version>1.1.2</version>
+    <version>2.0.0</version>
 </dependency>
 ```
 
