@@ -75,8 +75,6 @@
     <build>
         <finalName>${project.artifactId}</finalName>
 
-        <outputDirectory>${maven.multiModuleProjectDirectory}/target/${project.artifactId}/classes</outputDirectory> <!-- temporary fix for sbom-action not supporting multiple paths -->
-
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
