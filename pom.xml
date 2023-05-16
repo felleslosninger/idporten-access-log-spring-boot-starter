@@ -23,7 +23,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <logstash.logback.version>7.3</logstash.logback.version>
-        <opentelemetry-instrumentation.version>1.24.0</opentelemetry-instrumentation.version>
+        <opentelemetry-instrumentation.version>1.26.0</opentelemetry-instrumentation.version>
         <logback.version>1.4.7</logback.version>
 
 <!--   skadenr     877 88 599 ,2-->
