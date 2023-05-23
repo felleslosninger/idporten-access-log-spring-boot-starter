@@ -1,6 +1,6 @@
 package no.idporten.logging.access;
 
-import ch.qos.logback.access.tomcat.LogbackValve;
+import no.idporten.logging.access.tomcat.LogbackValve;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
@@ -36,14 +36,14 @@ public class AccessLogsConfiguration {
         };
     }
 
-    @Bean
-    public FilterRegistrationBean<ResponseFilter> filterRegistrationBean() {
-        FilterRegistrationBean<ResponseFilter> filterBean = new FilterRegistrationBean<>();
-        filterBean.setFilter(new ResponseFilter());
-        filterBean.setUrlPatterns(List.of("*"));
-        filterBean.setOrder(Integer.MAX_VALUE); // Want this filter last of filters in case the other filters do something with the response
-        LoggerFactory.getLogger(AccessLogsConfiguration.class).info(ResponseFilter.class.getName() + " order: " + filterBean.getOrder());
-        return filterBean;
-    }
+//    @Bean
+//    public FilterRegistrationBean<ResponseFilter> filterRegistrationBean() {
+//        FilterRegistrationBean<ResponseFilter> filterBean = new FilterRegistrationBean<>();
+//        filterBean.setFilter(new ResponseFilter());
+//        filterBean.setUrlPatterns(List.of("*"));
+//        filterBean.setOrder(Integer.MAX_VALUE); // Want this filter last of filters in case the other filters do something with the response
+//        LoggerFactory.getLogger(AccessLogsConfiguration.class).info(ResponseFilter.class.getName() + " order: " + filterBean.getOrder());
+//        return filterBean;
+//    }
 }
 
