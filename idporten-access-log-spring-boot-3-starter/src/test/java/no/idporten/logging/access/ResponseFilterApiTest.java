@@ -17,7 +17,7 @@ public class ResponseFilterApiTest {
     @Test
     public void when_post_and_responseBody_has_content_then_return_contentLength_of_responseBody() throws Exception {
         standaloneSetup(new TestController())
-                .addFilters(new ResponseFilter()).build()
+                .build()
                 .perform(post("/test"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(JSON_BODY))
@@ -30,7 +30,7 @@ public class ResponseFilterApiTest {
     void when_get_and_responseBody_has_content_then_return_contentLength_of_responseBody() throws Exception {
 
         standaloneSetup(new TestController())
-                .addFilters(new ResponseFilter()).build()
+                .build()
                 .perform(MockMvcRequestBuilders.get("/test"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(GET_BODY))
@@ -41,7 +41,7 @@ public class ResponseFilterApiTest {
     void when_responseBody_with_empty_content_then_return_no_contentLength() throws Exception {
 
         standaloneSetup(new TestController())
-                .addFilters(new ResponseFilter()).build()
+                .build()
                 .perform(MockMvcRequestBuilders.get("/nobody"))
                 .andExpect(status().isOk())
                 .andExpect(header().doesNotExist("content-length"));
