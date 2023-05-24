@@ -1,6 +1,6 @@
 package no.idporten.logging.access;
 
-import ch.qos.logback.access.tomcat.LogbackValve;
+import no.idporten.logging.access.tomcat.LogbackValve;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
