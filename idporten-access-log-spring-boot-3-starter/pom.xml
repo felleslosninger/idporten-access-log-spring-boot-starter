@@ -14,7 +14,7 @@
     <properties>
         <tomcat.version>10.1.8</tomcat.version>
         <spring-boot.version>3.0.6</spring-boot.version>
-        <logback.version>1.4.7</logback.version>
+        <logback.version>1.4.8</logback.version>
 
 
     </properties>
