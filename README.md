@@ -36,7 +36,7 @@ Or, for Spring Boot 3:
 <dependency>
     <groupId>no.idporten.logging</groupId>
     <artifactId>idporten-access-log-spring-boot-3-starter</artifactId>
-    <version>2.0.0</version>
+    <version>2.0.2</version>
 </dependency>
 ```
 
@@ -69,13 +69,20 @@ And you probably already have included these:
 ```
 
 ### Configuration
-The library is configured through the application.yml/yaml file.
+The library is configured through the application.yml/yaml or the active spring profile yaml-file.
 ```yaml
 spring:
   application:
     name: my-application-name
     environment: current-running-environment
 ```
+
+If you want to disable the Tomcat access logging completely, e.g. for local development, you can set the following property:
+```yaml
+tomcat:
+  accesslog: disabled
+```
+Set this property to 'enabled' or remove completely to enable Tomcat access logging.
 
 ## Troubleshooting
 If you can not see any access logging in IntelliJ, then try Maven->reload project.
