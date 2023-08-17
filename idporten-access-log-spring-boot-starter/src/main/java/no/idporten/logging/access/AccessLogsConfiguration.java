@@ -2,6 +2,7 @@ package no.idporten.logging.access;
 
 import no.idporten.logging.access.tomcat.LogbackValve;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
@@ -21,6 +22,7 @@ public class AccessLogsConfiguration {
     }
 
     @Bean
+    @ConditionalOnProperty(prefix = "tomcat", name = "accesslog", havingValue = "enabled", matchIfMissing = true)
     public WebServerFactoryCustomizer<TomcatServletWebServerFactory> accessLogsCustomizer(AccessLogsProperties props) {
         LoggerFactory.getLogger(AccessLogsConfiguration.class).info("Initialize accessLogsCustomizer for Tomcat Access Logging as JSON" ); 
         if(properties == null){
