@@ -12,7 +12,17 @@ public class AccessLogsProperties {
 
     private String name;
     private String environment;
+    private String logIndex;
 
+    
+    public String getLogIndex() {
+        return this.logIndex;
+    }
+
+    public void setLogIndex(String logIndex) {
+        this.logIndex = logIndex;
+    }
+    
     public String getName() {
         return this.name;
     }
