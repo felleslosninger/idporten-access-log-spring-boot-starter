@@ -22,7 +22,7 @@ public class AccessLogsConfiguration {
     }
 
     @Value("${digdir.access.logging.config-file:logback-access.xml}")
-    String logConfigfile = null;
+    String logConfigfile;
 
     @Bean
     @ConditionalOnProperty(prefix = "tomcat", name = "accesslog", havingValue = "enabled", matchIfMissing = true)
