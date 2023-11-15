@@ -84,5 +84,21 @@ tomcat:
 ```
 Set this property to 'enabled' or remove completely to enable Tomcat access logging.
 
+Use your own logback-access.xml file or configure debug-logging:
+```yaml
+digdir:
+  access:
+    logging:
+      debug-level: request
+      config-file: my-logback.xml # will override debug setting
+```
+USE EITHER `debug-level` OR `config-file`, not both.
+Valid values for debug-level are: 
+* `request`: logging attribute `fullRequest` in addition to normal logging.
+* `response`: logging attributes `fullRequest` and `fullResponse` in addition to normal logging.
+* Use default config if not set or null.
+
+NB: `debug-level` mode will log very much, use only temporary on servers with not to high load to avoid exhausting central logging-system.
+
 ## Troubleshooting
 If you can not see any access logging in IntelliJ, then try Maven->reload project.
