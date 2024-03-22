@@ -3,8 +3,28 @@
     <property resource="application.yaml" />
     <property resource="application.yml" />
     <appender name="accessJsonConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">      
+            <evaluator>
+                <expression>
+                    String uri = event.getRequestURI();
+                    if((event.getStatusCode() == 200 || event.getStatusCode() == 304)
+                        &amp;&amp; ((uri.startsWith("/css"))
+                                || (uri.startsWith("/js")) 
+                                || (uri.startsWith("/webfonts"))
+                                || (uri.startsWith("/img"))
+                                || (uri.startsWith("/favicon")))){
+                                    return true;
+                                }
+                    else if(uri.startsWith("/apple")){
+                        return true;
+                    }
+                    return false;
+                </expression>
+            </evaluator>
+            <OnMismatch>NEUTRAL</OnMismatch>
+            <OnMatch>DENY</OnMatch>
+        </filter>
         <encoder class="net.logstash.logback.encoder.AccessEventCompositeJsonEncoder">
-
             <providers>
                 <timestamp />
                 <pattern>
@@ -30,7 +50,6 @@
                 </pattern>
                 <provider class="no.idporten.logging.access.AccesslogProvider"/>
             </providers>
-
         </encoder>
     </appender>
     <appender-ref ref="accessJsonConsoleAppender" />
