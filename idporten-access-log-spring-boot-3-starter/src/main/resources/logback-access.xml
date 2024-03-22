@@ -50,8 +50,7 @@
                 </pattern>
                 <provider class="no.idporten.logging.access.AccesslogProvider"/>
             </providers>
-
-        </encoder>  
+        </encoder>
     </appender>
     <appender-ref ref="accessJsonConsoleAppender" />
 </configuration>
