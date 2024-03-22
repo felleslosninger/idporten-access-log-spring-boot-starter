@@ -18,6 +18,7 @@ public class AccesslogProvider extends AbstractFieldJsonProvider<IAccessEvent> i
     protected final static String SPAN_ID = "span_id";
     protected final static String APP_NAME = "application";
     protected final static String APP_ENV = "environment";
+    protected final static String LOG_INDEX = "log_index";
 
     @Override
     public void setFieldNames(LogstashFieldNames fieldNames) {
@@ -50,6 +51,15 @@ public class AccesslogProvider extends AbstractFieldJsonProvider<IAccessEvent> i
         }
     }
 
+    private void logLogIndex(JsonGenerator jsonGenerator) throws IOException {
+        String logIndex = AccessLogsConfiguration.getProperties() != null ? AccessLogsConfiguration.getProperties().getLogIndex() : null;
+        if (logIndex != null && logIndex.length() > 0) {
+            jsonGenerator.writeStringField(LOG_INDEX, logIndex);
+        } else {
+            jsonGenerator.writeStringField(LOG_INDEX, ""); // TODO: Verify Vector with platform-team: Should this be set to null?
+        }
+    }
+    
     /**
      * https://www.w3.org/TR/trace-context/#traceparent-header-field-values
      * version-format   = trace-id "-" parent-id "-" trace-flags

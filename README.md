@@ -75,6 +75,7 @@ spring:
   application:
     name: my-application-name
     environment: current-running-environment
+    log-index: elasticsearch-index-to-log-to on default format: digdir-<team-id>-<produkt-namespace>-<enviroment> e.g digdir-id-idporten-test
 ```
 
 If you want to disable the Tomcat access logging completely, e.g. for local development, you can set the following property:
