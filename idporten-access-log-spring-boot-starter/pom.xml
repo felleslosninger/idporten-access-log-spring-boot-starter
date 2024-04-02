@@ -15,6 +15,7 @@
         <tomcat.version>10.1.19</tomcat.version>
         <spring-boot.version>2.7.18</spring-boot.version>
         <logback.version>1.2.13</logback.version>
+        <janino.version>3.1.12</janino.version>
     </properties>
 
     <dependencyManagement>
@@ -25,6 +26,11 @@
                 <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.janino</groupId>
+                <artifactId>janino</artifactId>
+                <version>${janino.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
