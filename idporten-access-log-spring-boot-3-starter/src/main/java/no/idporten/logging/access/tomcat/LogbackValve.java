@@ -255,18 +255,21 @@ public class LogbackValve extends ValveBase
 
             getNext().invoke(request, response);
 
-            if(filterStaticResources) {
-                Object handlerObject = request.getAttribute(HandlerMapping.BEST_MATCHING_HANDLER_ATTRIBUTE);
-                if (handlerObject instanceof ResourceHttpRequestHandler) {
-                    return; // skip logging static resources
+            int status = response.getStatus();
+            if (status == 200 || status == 304) { // only filter out successful requests
+                if (filterStaticResources) {
+                    Object handlerObject = request.getAttribute(HandlerMapping.BEST_MATCHING_HANDLER_ATTRIBUTE);
+                    if (handlerObject instanceof ResourceHttpRequestHandler) {
+                        return; // skip logging static resources
+                    }
                 }
-            }
 
-            if(filterPaths != null) {
-                String requestURI = request.getRequestURI();
-                for (String filterPath : filterPaths) {
-                    if(requestURI.startsWith(filterPath)) {
-                        return; // skip logging paths that are filtered
+                if (filterPaths != null) {
+                    String requestURI = request.getRequestURI();
+                    for (String filterPath : filterPaths) {
+                        if (requestURI.startsWith(filterPath)) {
+                            return; // skip logging paths that are filtered
+                        }
                     }
                 }
             }
