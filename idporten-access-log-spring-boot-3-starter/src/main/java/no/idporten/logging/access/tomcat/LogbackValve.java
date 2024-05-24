@@ -36,6 +36,8 @@ import org.apache.catalina.LifecycleState;
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
 import org.apache.catalina.valves.ValveBase;
+import org.springframework.web.servlet.HandlerMapping;
+import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 
 import java.io.File;
 import java.io.IOException;
@@ -95,6 +97,17 @@ public class LogbackValve extends ValveBase
     private SequenceNumberGenerator sequenceNumberGenerator;
 
     private ScheduledExecutorService scheduledExecutorService;
+
+    private boolean filterStaticResources = true;
+    public void setFilterStaticResources(boolean filterStaticResources) {
+        this.filterStaticResources = filterStaticResources;
+    }
+
+    private List<String> filterPaths = null;
+    public void setFilterPaths(List<String> filterPaths) {
+        this.filterPaths = filterPaths;
+    }
+
 
     public LogbackValve() {
         putObject(CoreConstants.EVALUATOR_MAP, new HashMap<String, EventEvaluator<?>>());
@@ -241,6 +254,24 @@ public class LogbackValve extends ValveBase
             }
 
             getNext().invoke(request, response);
+
+            if (response.getStatus() < 400) { // only filter out successful requests
+                if (filterStaticResources) {
+                    Object handlerObject = request.getAttribute(HandlerMapping.BEST_MATCHING_HANDLER_ATTRIBUTE);
+                    if (handlerObject instanceof ResourceHttpRequestHandler) {
+                        return; // skip logging static resources
+                    }
+                }
+
+                if (filterPaths != null) {
+                    String requestURI = request.getRequestURI();
+                    for (String filterPath : filterPaths) {
+                        if (requestURI.startsWith(filterPath)) {
+                            return; // skip logging paths that are filtered
+                        }
+                    }
+                }
+            }
 
             TomcatServerAdapter adapter = new TomcatServerAdapter(request, response);
             IAccessEvent accessEvent = new AccessEvent(this, request, response, adapter);

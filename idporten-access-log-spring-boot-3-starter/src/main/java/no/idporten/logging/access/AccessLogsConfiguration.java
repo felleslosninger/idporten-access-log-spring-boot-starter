@@ -10,6 +10,8 @@ import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.List;
+
 @Configuration
 @EnableConfigurationProperties(AccessLogsProperties.class)
 public class AccessLogsConfiguration {
@@ -32,9 +34,18 @@ public class AccessLogsConfiguration {
     @Value("${digdir.access.logging.debug-level:}")
     String debugLevel;
 
+    @Value("${digdir.access.logging.filtering.static-resources:true}")
+    boolean filterStaticResources;
+
+    @Value("${digdir.access.logging.filtering.paths:}")
+    List<String> filterPaths;
+
+    @Value("${tomcat.accesslog:}")
+    String deprecatedTomcatAccessLogProperty;
+
 
     @Bean
-    @ConditionalOnProperty(prefix = "tomcat", name = "accesslog", havingValue = "enabled", matchIfMissing = true)
+    @ConditionalOnProperty(name = "server.tomcat.accesslog.enabled", havingValue = "true", matchIfMissing = true)
     public WebServerFactoryCustomizer<TomcatServletWebServerFactory> accessLogsCustomizer(AccessLogsProperties props) {
         if (properties == null) {
             properties = props;
@@ -43,10 +54,16 @@ public class AccessLogsConfiguration {
 
         LoggerFactory.getLogger(AccessLogsConfiguration.class).info("Initialize accessLogsCustomizer for Tomcat Access Logging as JSON. Use config-file: " + logbackConfigFile);
 
+        if(deprecatedTomcatAccessLogProperty != null && !deprecatedTomcatAccessLogProperty.equals("enabled")) { // deprecated property is set, and set to something else than 'enabled'
+            LoggerFactory.getLogger(AccessLogsConfiguration.class).warn("Property 'tomcat.accesslog' is deprecated. Use 'server.tomcat.accesslog.enabled=false' instead.");
+        }
+
         return factory -> {
             var logbackValve = new LogbackValve();
             logbackValve.setFilename(logbackConfigFile);
             logbackValve.setAsyncSupported(true);
+            logbackValve.setFilterStaticResources(filterStaticResources);
+            logbackValve.setFilterPaths(filterPaths);
             factory.addContextValves(logbackValve);
         };
     }
