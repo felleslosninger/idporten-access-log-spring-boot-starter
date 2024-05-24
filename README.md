@@ -77,12 +77,19 @@ spring:
     environment: current-running-environment
 ```
 
+The library uses the standard tomcat accesslog property for enabling or disabling logging:
+```yaml
+server:
+  tomcat:
+    accesslog:
+      enabled: true # default is true if not set
+```
+
 Use your own logback-access.xml file or configure debug-logging:
 ```yaml
 digdir:
   access:
     logging:
-      enabled: true # default is true
       debug-level: request # [request|response],  default config if not set or null
       config-file: my-logback.xml # will override debug setting
       filtering:

@@ -45,7 +45,7 @@ public class AccessLogsConfiguration {
 
 
     @Bean
-    @ConditionalOnProperty(name = "digdir.access.logging.enabled", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnProperty(name = "server.tomcat.accesslog.enabled", havingValue = "true", matchIfMissing = true)
     public WebServerFactoryCustomizer<TomcatServletWebServerFactory> accessLogsCustomizer(AccessLogsProperties props) {
         if (properties == null) {
             properties = props;
@@ -55,7 +55,7 @@ public class AccessLogsConfiguration {
         LoggerFactory.getLogger(AccessLogsConfiguration.class).info("Initialize accessLogsCustomizer for Tomcat Access Logging as JSON. Use config-file: " + logbackConfigFile);
 
         if(deprecatedTomcatAccessLogProperty != null && !deprecatedTomcatAccessLogProperty.equals("enabled")) { // deprecated property is set, and set to something else than 'enabled'
-            LoggerFactory.getLogger(AccessLogsConfiguration.class).warn("Property 'tomcat.accesslog' is deprecated. Use 'digdir.access.logging.enabled=false' instead.");
+            LoggerFactory.getLogger(AccessLogsConfiguration.class).warn("Property 'tomcat.accesslog' is deprecated. Use 'server.tomcat.accesslog.enabled=false' instead.");
         }
 
         return factory -> {
