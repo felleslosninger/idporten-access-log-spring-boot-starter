@@ -99,8 +99,8 @@ public class LogbackValve extends ValveBase
     private ScheduledExecutorService scheduledExecutorService;
 
     private boolean filterStaticResources = true;
-    public void setFilterStaticResources(String filterStaticResources) {
-        this.filterStaticResources = Boolean.parseBoolean(filterStaticResources);
+    public void setFilterStaticResources(boolean filterStaticResources) {
+        this.filterStaticResources = filterStaticResources;
     }
 
     private List<String> filterPaths = null;

@@ -35,14 +35,17 @@ public class AccessLogsConfiguration {
     String debugLevel;
 
     @Value("${digdir.access.logging.filtering.static-resources:true}")
-    String filterStaticResources;
+    boolean filterStaticResources;
 
     @Value("${digdir.access.logging.filtering.paths:}")
     List<String> filterPaths;
 
+    @Value("${tomcat.accesslog:}")
+    String deprecatedTomcatAccessLogProperty;
+
 
     @Bean
-    @ConditionalOnProperty(prefix = "digdir.access", name = "logging", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnProperty(name = "digdir.access.logging.enabled", havingValue = "true", matchIfMissing = true)
     public WebServerFactoryCustomizer<TomcatServletWebServerFactory> accessLogsCustomizer(AccessLogsProperties props) {
         if (properties == null) {
             properties = props;
@@ -50,6 +53,10 @@ public class AccessLogsConfiguration {
         String logbackConfigFile = checkIfDebugFeatureEnabledAndConfigureLogbackfile(logConfigfile, debugLevel);
 
         LoggerFactory.getLogger(AccessLogsConfiguration.class).info("Initialize accessLogsCustomizer for Tomcat Access Logging as JSON. Use config-file: " + logbackConfigFile);
+
+        if(deprecatedTomcatAccessLogProperty != null && !deprecatedTomcatAccessLogProperty.equals("enabled")) { // deprecated property is set, and set to something else than 'enabled'
+            LoggerFactory.getLogger(AccessLogsConfiguration.class).warn("Property 'tomcat.accesslog' is deprecated. Use 'digdir.access.logging.enabled=false' instead.");
+        }
 
         return factory -> {
             var logbackValve = new LogbackValve();

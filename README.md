@@ -87,7 +87,7 @@ digdir:
       config-file: my-logback.xml # will override debug setting
       filtering:
         static-resources: true # filters out static resources. default is true
-        paths: /config.json, /.well-known # comma-separated list of paths to filter out. Matches paths using .startsWith(). Default is emptu. 
+        paths: /config.json, /.well-known # comma-separated list of paths to filter out. Matches paths using .startsWith(). Default is empty. 
 ```
 USE EITHER `debug-level` OR `config-file`, not both.
 Valid values for debug-level are: 
