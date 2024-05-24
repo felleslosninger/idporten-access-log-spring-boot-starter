@@ -10,6 +10,8 @@ import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.List;
+
 @Configuration
 @EnableConfigurationProperties(AccessLogsProperties.class)
 public class AccessLogsConfiguration {
@@ -32,9 +34,15 @@ public class AccessLogsConfiguration {
     @Value("${digdir.access.logging.debug-level:}")
     String debugLevel;
 
+    @Value("${digdir.access.logging.filtering.static-resources:true}")
+    String filterStaticResources;
+
+    @Value("${digdir.access.logging.filtering.paths:}")
+    List<String> filterPaths;
+
 
     @Bean
-    @ConditionalOnProperty(prefix = "tomcat", name = "accesslog", havingValue = "enabled", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = "digdir.access", name = "logging", havingValue = "true", matchIfMissing = true)
     public WebServerFactoryCustomizer<TomcatServletWebServerFactory> accessLogsCustomizer(AccessLogsProperties props) {
         if (properties == null) {
             properties = props;
@@ -47,6 +55,8 @@ public class AccessLogsConfiguration {
             var logbackValve = new LogbackValve();
             logbackValve.setFilename(logbackConfigFile);
             logbackValve.setAsyncSupported(true);
+            logbackValve.setFilterStaticResources(filterStaticResources);
+            logbackValve.setFilterPaths(filterPaths);
             factory.addContextValves(logbackValve);
         };
     }

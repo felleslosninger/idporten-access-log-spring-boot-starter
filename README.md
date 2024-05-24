@@ -36,7 +36,7 @@ Or, for Spring Boot 3:
 <dependency>
     <groupId>no.idporten.logging</groupId>
     <artifactId>idporten-access-log-spring-boot-3-starter</artifactId>
-    <version>2.0.2</version>
+    <version>2.3.4</version>
 </dependency>
 ```
 
@@ -77,20 +77,17 @@ spring:
     environment: current-running-environment
 ```
 
-If you want to disable the Tomcat access logging completely, e.g. for local development, you can set the following property:
-```yaml
-tomcat:
-  accesslog: disabled
-```
-Set this property to 'enabled' or remove completely to enable Tomcat access logging.
-
 Use your own logback-access.xml file or configure debug-logging:
 ```yaml
 digdir:
   access:
     logging:
-      debug-level: request
+      enabled: true # default is true
+      debug-level: request # [request|response],  default config if not set or null
       config-file: my-logback.xml # will override debug setting
+      filtering:
+        static-resources: true # filters out static resources. default is true
+        paths: /config.json, /.well-known # comma-separated list of paths to filter out. Matches paths using .startsWith(). Default is emptu. 
 ```
 USE EITHER `debug-level` OR `config-file`, not both.
 Valid values for debug-level are: 
