@@ -482,7 +482,6 @@ public class LogbackValve extends ValveBase
         this.sequenceNumberGenerator = sequenceNumberGenerator;
     }
 
-
     @Override
     public void addConfigurationEventListener(ConfigurationEventListener listener) {
         configurationEventListenerList.add(listener);
@@ -491,5 +490,10 @@ public class LogbackValve extends ValveBase
     @Override
     public void fireConfigurationEvent(ConfigurationEvent configurationEvent) {
         configurationEventListenerList.forEach( l -> l.listen(configurationEvent));
+    }
+
+    @Override
+    public void addSubstitutionProperty(String arg0, String arg1) {
+        propertyMap.put(arg0, arg1);
     }
 }
