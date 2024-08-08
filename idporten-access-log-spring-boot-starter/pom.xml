@@ -15,6 +15,7 @@
         <tomcat.version>10.1.19</tomcat.version>
         <spring-boot.version>2.7.18</spring-boot.version>
         <logback.version>1.2.13</logback.version>
+        <logstash-logback-encoder.version>7.4</logstash-logback-encoder.version>
     </properties>
 
     <dependencyManagement>
@@ -61,6 +62,7 @@
         <dependency>
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
+            <version>${logstash-logback-encoder.version}</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>

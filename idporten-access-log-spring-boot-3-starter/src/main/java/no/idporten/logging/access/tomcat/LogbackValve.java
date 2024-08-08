@@ -13,10 +13,10 @@
  */
 package no.idporten.logging.access.tomcat;
 
-import ch.qos.logback.access.AccessConstants;
-import ch.qos.logback.access.joran.JoranConfigurator;
-import ch.qos.logback.access.spi.AccessEvent;
-import ch.qos.logback.access.spi.IAccessEvent;
+import ch.qos.logback.access.common.AccessConstants;
+import ch.qos.logback.access.common.joran.JoranConfigurator;
+import ch.qos.logback.access.common.spi.AccessEvent;
+import ch.qos.logback.access.common.spi.IAccessEvent;
 import ch.qos.logback.core.*;
 import ch.qos.logback.core.boolex.EventEvaluator;
 import ch.qos.logback.core.filter.Filter;
@@ -363,6 +363,11 @@ public class LogbackValve extends ValveBase
     @Override
     public void putProperty(String key, String val) {
         this.propertyMap.put(key, val);
+    }
+
+    @Override
+    public void addSubstitutionProperty(String key, String value) {
+        putProperty(key, value);
     }
 
     @Override
