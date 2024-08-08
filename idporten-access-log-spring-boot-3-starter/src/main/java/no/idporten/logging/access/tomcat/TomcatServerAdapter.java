@@ -13,7 +13,7 @@
  */
 package no.idporten.logging.access.tomcat;
 
-import ch.qos.logback.access.spi.ServerAdapter;
+import ch.qos.logback.access.common.spi.ServerAdapter;
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
 

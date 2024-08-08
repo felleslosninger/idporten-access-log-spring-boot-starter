@@ -1,6 +1,6 @@
 package no.idporten.logging.access;
 
-import ch.qos.logback.access.spi.IAccessEvent;
+import ch.qos.logback.access.common.spi.IAccessEvent;
 import com.fasterxml.jackson.core.JsonGenerator;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.SpanContext;
@@ -13,11 +13,11 @@ import java.io.IOException;
 
 public class AccesslogProvider extends AbstractFieldJsonProvider<IAccessEvent> implements FieldNamesAware<LogstashFieldNames> {
 
-    protected final static String TRACE_ID = "trace_id";
-    protected final static String TRACE_FLAGS = "trace_flags";
-    protected final static String SPAN_ID = "span_id";
-    protected final static String APP_NAME = "application";
-    protected final static String APP_ENV = "environment";
+    protected static final String TRACE_ID = "trace_id";
+    protected static final String TRACE_FLAGS = "trace_flags";
+    protected static final String SPAN_ID = "span_id";
+    protected static final String APP_NAME = "application";
+    protected static final String APP_ENV = "environment";
 
     @Override
     public void setFieldNames(LogstashFieldNames fieldNames) {
@@ -34,7 +34,7 @@ public class AccesslogProvider extends AbstractFieldJsonProvider<IAccessEvent> i
 
     private void logEnvironment(JsonGenerator jsonGenerator) throws IOException {
         String appenv = AccessLogsConfiguration.getProperties() != null ? AccessLogsConfiguration.getProperties().getEnvironment() : null;
-        if (appenv != null && appenv.length() > 0) {
+        if (appenv != null && !appenv.isEmpty()) {
             jsonGenerator.writeStringField(APP_ENV, appenv);
         } else {
             jsonGenerator.writeStringField(APP_ENV, "-");
@@ -43,7 +43,7 @@ public class AccesslogProvider extends AbstractFieldJsonProvider<IAccessEvent> i
 
     private void logAppName(JsonGenerator jsonGenerator) throws IOException {
         String appname = AccessLogsConfiguration.getProperties() != null ? AccessLogsConfiguration.getProperties().getName() : null;
-        if (appname != null && appname.length() > 0) {
+        if (appname != null && !appname.isEmpty()) {
             jsonGenerator.writeStringField(APP_NAME, appname);
         } else {
             jsonGenerator.writeStringField(APP_NAME, "-");
