@@ -98,7 +98,6 @@
         <dependency>
             <groupId>ch.qos.logback.access</groupId>
             <artifactId>common</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.codehaus.janino</groupId>
