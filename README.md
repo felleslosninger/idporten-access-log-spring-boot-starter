@@ -24,6 +24,7 @@ mvn clean install
 
 ## Usage
 The library can be imported through maven with (see latest version under [releases](https://github.com/felleslosninger/idporten-access-log-spring-boot-starter/releases)):
+### Spring Boot 2:
 ```xml
 <dependency>
     <groupId>no.idporten.logging</groupId>
@@ -31,21 +32,13 @@ The library can be imported through maven with (see latest version under [releas
     <version>1.1.1</version>
 </dependency>
 ```
-Or, for Spring Boot 3:
-```xml
-<dependency>
-    <groupId>no.idporten.logging</groupId>
-    <artifactId>idporten-access-log-spring-boot-3-starter</artifactId>
-    <version>2.3.4</version>
-</dependency>
-```
-
 
 Also needs dependency:
 ```xml
 <dependency>
     <groupId>ch.qos.logback</groupId>
     <artifactId>logback-access</artifactId>
+    <version>1.4.14</version>
 </dependency>
 ```
 And you probably already have included these:
@@ -62,6 +55,28 @@ And you probably already have included these:
     <groupId>net.logstash.logback</groupId>
     <artifactId>logstash-logback-encoder</artifactId>
 </dependency>
+<dependency>
+    <groupId>io.opentelemetry.instrumentation</groupId>
+    <artifactId>opentelemetry-instrumentation-api</artifactId>
+</dependency>
+```
+
+### Spring Boot 3:
+```xml
+<dependency>
+    <groupId>no.idporten.logging</groupId>
+    <artifactId>idporten-access-log-spring-boot-3-starter</artifactId>
+    <version>2.4.0</version>
+</dependency>
+```
+
+And you probably already have included these:
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+
 <dependency>
     <groupId>io.opentelemetry.instrumentation</groupId>
     <artifactId>opentelemetry-instrumentation-api</artifactId>
