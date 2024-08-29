@@ -11,7 +11,7 @@ See [idporten-access-log-spring-boot-3-starter/src/main/resources/logback-access
 
 To build and run the application you need:
 
-* JDK 11
+* JDK 17
 * Maven
 
 ## Build library
@@ -25,6 +25,8 @@ mvn clean install
 ## Usage
 The library can be imported through maven with (see latest version under [releases](https://github.com/felleslosninger/idporten-access-log-spring-boot-starter/releases)):
 ### Spring Boot 2:
+Warning: This version is not maintained anymore, use Spring Boot 3 version instead.
+
 ```xml
 <dependency>
     <groupId>no.idporten.logging</groupId>
