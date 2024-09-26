@@ -49,8 +49,16 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.locks.ReentrantLock;
 
-//import org.apache.catalina.Lifecycle;
 
+// Find code here https://repo1.maven.org/maven2/ch/qos/logback/access/tomcat/2.0.3/
+// This class replaces ch.qos.logback.access.tomcat.LogbackValve
+// This class is checked and conforms to version 2.0.3 of LogbackValve above.
+//
+// And it is not a very much better idea to override this class because of all the instance variables,
+// especially hard with 'aai'. Causes you to include most of this anyway.
+//
+// Search for 'ID-porten' in this class to find custom code which makes it easier to upgrade to new version from Logback
+// when our custom code is clearly marked.
 /**
  * This class is an implementation of tomcat's Valve interface, by extending
  * ValveBase.
@@ -99,6 +107,8 @@ public class LogbackValve extends ValveBase
 
     private ScheduledExecutorService scheduledExecutorService;
 
+
+    // ID-porten code start
     private boolean filterStaticResources = true;
     public void setFilterStaticResources(boolean filterStaticResources) {
         this.filterStaticResources = filterStaticResources;
@@ -108,7 +118,7 @@ public class LogbackValve extends ValveBase
     public void setFilterPaths(List<String> filterPaths) {
         this.filterPaths = filterPaths;
     }
-
+    // ID-porten code end
 
     public LogbackValve() {
         putObject(CoreConstants.EVALUATOR_MAP, new HashMap<String, EventEvaluator<?>>());
@@ -256,6 +266,7 @@ public class LogbackValve extends ValveBase
 
             getNext().invoke(request, response);
 
+            // ID-porten code start
             if (response.getStatus() < 400) { // only filter out successful requests
                 if (filterStaticResources) {
                     Object handlerObject = request.getAttribute(HandlerMapping.BEST_MATCHING_HANDLER_ATTRIBUTE);
@@ -273,6 +284,7 @@ public class LogbackValve extends ValveBase
                     }
                 }
             }
+            // ID-porten code end
 
             TomcatServerAdapter adapter = new TomcatServerAdapter(request, response);
             IAccessEvent accessEvent = new AccessEvent(this, request, response, adapter);
