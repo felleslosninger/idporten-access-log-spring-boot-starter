@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestController {
 
-    protected static String GET_BODY = "Flott response body";
-    protected static String JSON_BODY = "{\"my\":\"body\"}";
+    protected static final String GET_BODY = "Flott response body";
+    protected static final String JSON_BODY = "{\"my\":\"body\"}";
 
     @GetMapping("/test")
     public ResponseEntity<String> testGetWithResponsebody() {
@@ -22,10 +22,8 @@ public class TestController {
         return ResponseEntity.ok(JSON_BODY);
     }
 
-
     @GetMapping("/nobody")
     public ResponseEntity<String> noBody() {
         return ResponseEntity.ok(null);
     }
-
 }
