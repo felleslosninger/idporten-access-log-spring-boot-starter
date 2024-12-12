@@ -71,14 +71,14 @@ public class AccessLogsConfiguration {
     @Order(1)
     public SingleStringFieldAccessLogDecorator appNameAccessLogDecorator(AccessLogsProperties properties) {
         return new SingleStringFieldAccessLogDecorator(AccessLogFields.APP_NAME,
-                StringUtils.hasText(properties.getName()) ? properties.getName() : "-");
+                StringUtils.hasText(properties.getName()) ? properties.getName() : "");
     }
 
     @Bean
     @Order(2)
     public SingleStringFieldAccessLogDecorator environmentAccessLogDecorator(AccessLogsProperties properties) {
         return new SingleStringFieldAccessLogDecorator(AccessLogFields.APP_ENV,
-                StringUtils.hasText(properties.getEnvironment()) ? properties.getEnvironment() : "-");
+                StringUtils.hasText(properties.getEnvironment()) ? properties.getEnvironment() : "");
     }
 
     @Bean

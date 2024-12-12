@@ -24,7 +24,6 @@ public class TraceIdAccessLogDecorator implements AccessLogDecorator {
             String[] split = traceparent.split("-");
             jsonGenerator.writeStringField(AccessLogFields.TRACE_ID, split[1]);
             jsonGenerator.writeStringField(AccessLogFields.SPAN_ID, split[2]);
-            jsonGenerator.writeStringField(AccessLogFields.TRACE_FLAGS, split[3]);
         } else if (Span.current() != null && Span.current().getSpanContext() != null && Span.current().getSpanContext().getTraceId() != null) {
             log.debug("traceparent not found as request header: {}", iAccessEvent);
             SpanContext spanContext = Span.current().getSpanContext();
@@ -34,11 +33,8 @@ public class TraceIdAccessLogDecorator implements AccessLogDecorator {
                 return;
             }
             String spanId = spanContext.getSpanId();
-            String traceFlags = spanContext.getTraceFlags().asHex();
-
             jsonGenerator.writeStringField(AccessLogFields.TRACE_ID, traceId);
             jsonGenerator.writeStringField(AccessLogFields.SPAN_ID, spanId);
-            jsonGenerator.writeStringField(AccessLogFields.TRACE_FLAGS, traceFlags);
         } else {
             log.debug("traceparent not found as request header: {} or in spanContext: {}", iAccessEvent, Span.current().getSpanContext());
         }
