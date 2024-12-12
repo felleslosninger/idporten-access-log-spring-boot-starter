@@ -1,7 +1,10 @@
 package no.idporten.logging.access;
 
+import lombok.extern.slf4j.Slf4j;
+import no.idporten.logging.access.decorator.AccessLogDecorators;
+import no.idporten.logging.access.decorator.SingleStringFieldAccessLogDecorator;
+import no.idporten.logging.access.decorator.TraceIdAccessLogDecorator;
 import no.idporten.logging.access.tomcat.LogbackValve;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -9,24 +12,19 @@ import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactor
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
+@Slf4j
 @Configuration
 @EnableConfigurationProperties(AccessLogsProperties.class)
 public class AccessLogsConfiguration {
 
-
-    // Static properties to make spring application properties available to AccesslogProvider
-    private static AccessLogsProperties properties = null;
-
     protected static final String DEFAULT_LOGBACK_CONFIG_FILE = "logback-access.xml";
     protected static final String LOGBACK_CONFIG_REQ_FULL_FILE = "logback-access-req-full.xml";
     protected static final String LOGBACK_CONFIG_REQ_RESP_FULL_FILE = "logback-access-req-resp-full.xml";
-
-    public static AccessLogsProperties getProperties() {
-        return properties;
-    }
 
     @Value("${digdir.access.logging.config-file:logback-access.xml}")
     String logConfigfile;
@@ -43,19 +41,15 @@ public class AccessLogsConfiguration {
     @Value("${tomcat.accesslog:}")
     String deprecatedTomcatAccessLogProperty;
 
-
     @Bean
     @ConditionalOnProperty(name = "server.tomcat.accesslog.enabled", havingValue = "true", matchIfMissing = true)
-    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> accessLogsCustomizer(AccessLogsProperties props) {
-        if (properties == null) {
-            properties = props;
-        }
+    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> accessLogsCustomizer() {
         String logbackConfigFile = checkIfDebugFeatureEnabledAndConfigureLogbackfile(logConfigfile, debugLevel);
 
-        LoggerFactory.getLogger(AccessLogsConfiguration.class).info("Initialize accessLogsCustomizer for Tomcat Access Logging as JSON. Use config-file: " + logbackConfigFile);
+        log.info("Initialize accessLogsCustomizer for Tomcat Access Logging as JSON. Use config-file: {}", logbackConfigFile);
 
-        if(deprecatedTomcatAccessLogProperty != null && !deprecatedTomcatAccessLogProperty.equals("enabled")) { // deprecated property is set, and set to something else than 'enabled'
-            LoggerFactory.getLogger(AccessLogsConfiguration.class).warn("Property 'tomcat.accesslog' is deprecated. Use 'server.tomcat.accesslog.enabled=false' instead.");
+        if (deprecatedTomcatAccessLogProperty != null && !deprecatedTomcatAccessLogProperty.equals("enabled")) { // deprecated property is set, and set to something else than 'enabled'
+            log.warn("Property 'tomcat.accesslog' is deprecated. Use 'server.tomcat.accesslog.enabled=false' instead.");
         }
 
         return factory -> {
@@ -66,6 +60,31 @@ public class AccessLogsConfiguration {
             logbackValve.setFilterPaths(filterPaths);
             factory.addContextValves(logbackValve);
         };
+    }
+
+    @Bean
+    public AccessLogDecorators accessLogDecorators() {
+        return new AccessLogDecorators();
+    }
+
+    @Bean
+    @Order(1)
+    public SingleStringFieldAccessLogDecorator appNameAccessLogDecorator(AccessLogsProperties properties) {
+        return new SingleStringFieldAccessLogDecorator(AccessLogFields.APP_NAME,
+                StringUtils.hasText(properties.getName()) ? properties.getName() : "-");
+    }
+
+    @Bean
+    @Order(2)
+    public SingleStringFieldAccessLogDecorator environmentAccessLogDecorator(AccessLogsProperties properties) {
+        return new SingleStringFieldAccessLogDecorator(AccessLogFields.APP_ENV,
+                StringUtils.hasText(properties.getEnvironment()) ? properties.getEnvironment() : "-");
+    }
+
+    @Bean
+    @Order(3)
+    public TraceIdAccessLogDecorator traceIdAccessLogDecorator() {
+        return new TraceIdAccessLogDecorator();
     }
 
     /**

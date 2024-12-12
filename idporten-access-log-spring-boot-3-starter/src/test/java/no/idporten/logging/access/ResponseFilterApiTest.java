@@ -12,10 +12,10 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 
 // NB: Ser at ResponseFilter køyrer og set content-length via debuggeren,
 // men mockmvc-filter ser ut til uansett å legge på content-length, så får ikkje køyrt sikkeleg test eller negativ test.
-public class ResponseFilterApiTest {
+class ResponseFilterApiTest {
 
     @Test
-    public void when_post_and_responseBody_has_content_then_return_contentLength_of_responseBody() throws Exception {
+    void when_post_and_responseBody_has_content_then_return_contentLength_of_responseBody() throws Exception {
         standaloneSetup(new TestController())
                 .build()
                 .perform(post("/test"))
@@ -46,5 +46,4 @@ public class ResponseFilterApiTest {
                 .andExpect(status().isOk())
                 .andExpect(header().doesNotExist("content-length"));
     }
-
 }

@@ -9,10 +9,11 @@ import org.springframework.test.context.ContextConfiguration;
 @SpringBootTest
 @ContextConfiguration(classes = {MockApplication.class})
 @ActiveProfiles("enabled")
-public class MockApplicationTest {
+class MockApplicationTest {
 
     @Test
     @DisplayName("then application context can be loaded when config is set correctly")
     void contextLoads() {
+        // NOOP
     }
 }
