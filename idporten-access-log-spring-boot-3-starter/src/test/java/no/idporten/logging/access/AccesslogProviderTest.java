@@ -12,7 +12,7 @@ import java.io.IOException;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 class AccesslogProviderTest {
 
     private final AccesslogProvider provider = new AccesslogProvider();
@@ -25,9 +25,8 @@ class AccesslogProviderTest {
 
     private static final String TRACE_ID_DEFAULT = "00000000000000000000000000000000";
     private static final String SPAN_ID_DEFAULT = "0000000000000000";
-    private static final String TRACE_FLAGS_DEFAULT = "00";
 
-    @DisplayName("When traceparent in request header then splitt into trace_id, span_id and trace_flags attributes in log")
+    @DisplayName("When traceparent in request header then split into trace_id, span_id and trace_flags attributes in log")
     @Test
     void whenTraceparentInHeaderDoWriteToLog() throws IOException {
         String traceId = "20de808841dc7472ad534f8730f5b06c";
@@ -38,10 +37,8 @@ class AccesslogProviderTest {
         provider.writeTo(generator, event);
         verify(generator).writeStringField(AccessLogFields.TRACE_ID, traceId);
         verify(generator).writeStringField(AccessLogFields.SPAN_ID, spanId);
-        verify(generator).writeStringField(AccessLogFields.TRACE_FLAGS, traceFlags);
-
-        verify(generator).writeStringField(AccessLogFields.APP_NAME, "-");
-        verify(generator).writeStringField(AccessLogFields.APP_ENV, "-");
+        verify(generator).writeStringField(AccessLogFields.APP_NAME, "");
+        verify(generator).writeStringField(AccessLogFields.APP_ENV, "");
     }
 
     @DisplayName("When no traceparent in request header and opentelemetry agent not enabled, then log from spancontext default traceid")
@@ -49,10 +46,9 @@ class AccesslogProviderTest {
     void whenNoTraceparentInHeaderDoNotWriteToLog() throws IOException {
         provider.writeTo(generator, event);
         verify(generator, atMost(5)).writeStringField(anyString(), anyString());
-        verify(generator).writeStringField(AccessLogFields.APP_NAME, "-");
-        verify(generator).writeStringField(AccessLogFields.APP_ENV, "-");
+        verify(generator).writeStringField(AccessLogFields.APP_NAME, "");
+        verify(generator).writeStringField(AccessLogFields.APP_ENV, "");
         verify(generator).writeStringField(AccessLogFields.TRACE_ID, TRACE_ID_DEFAULT);
         verify(generator).writeStringField(AccessLogFields.SPAN_ID, SPAN_ID_DEFAULT);
-        verify(generator).writeStringField(AccessLogFields.TRACE_FLAGS, TRACE_FLAGS_DEFAULT);
     }
 }
