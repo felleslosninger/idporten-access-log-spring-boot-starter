@@ -10,7 +10,6 @@
 
     <artifactId>idporten-access-log-spring-boot-starter</artifactId>
 
-
     <properties>
         <tomcat.version>10.1.30</tomcat.version>
         <spring-boot.version>2.7.18</spring-boot.version>
