@@ -13,7 +13,7 @@
 
     <properties>
         <tomcat.version>10.1.19</tomcat.version>
-        <spring-boot.version>3.4.0</spring-boot.version>
+        <spring-boot.version>3.4.1</spring-boot.version>
         <janino.version>3.1.12</janino.version>
         <logstash-logback-encoder.version>8.0</logstash-logback-encoder.version>
         <logback-classic.version>1.5.11</logback-classic.version>
