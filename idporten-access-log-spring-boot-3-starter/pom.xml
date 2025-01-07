@@ -97,7 +97,7 @@
         </dependency>
         <dependency>
             <groupId>ch.qos.logback.access</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>logback-access-common</artifactId>
         </dependency>
              
         <dependency>
