@@ -24,6 +24,29 @@ mvn clean install
 
 ## Usage
 The library can be imported through maven with (see latest version under [releases](https://github.com/felleslosninger/idporten-access-log-spring-boot-starter/releases)):
+
+### Spring Boot 3:
+```xml
+<dependency>
+    <groupId>no.idporten.logging</groupId>
+    <artifactId>idporten-access-log-spring-boot-3-starter</artifactId>
+    <version>2.6.0</version>
+</dependency>
+```
+
+And you probably already have included these:
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>io.opentelemetry.instrumentation</groupId>
+    <artifactId>opentelemetry-instrumentation-api</artifactId>
+</dependency>
+```
+
 ### Spring Boot 2:
 Warning: This version is not maintained anymore, use Spring Boot 3 version instead.
 
@@ -63,28 +86,6 @@ And you probably already have included these:
 </dependency>
 ```
 
-### Spring Boot 3:
-```xml
-<dependency>
-    <groupId>no.idporten.logging</groupId>
-    <artifactId>idporten-access-log-spring-boot-3-starter</artifactId>
-    <version>2.4.0</version>
-</dependency>
-```
-
-And you probably already have included these:
-```xml
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-web</artifactId>
-</dependency>
-
-<dependency>
-    <groupId>io.opentelemetry.instrumentation</groupId>
-    <artifactId>opentelemetry-instrumentation-api</artifactId>
-</dependency>
-```
-
 ### Configuration
 The library is configured through the application.yml/yaml or the active spring profile yaml-file.
 ```yaml
@@ -101,6 +102,7 @@ server:
     accesslog:
       enabled: true # default is true if not set
 ```
+Only include this property if you need to disable access logging, since it is always default enabled.
 
 Use your own logback-access.xml file or configure debug-logging:
 ```yaml
