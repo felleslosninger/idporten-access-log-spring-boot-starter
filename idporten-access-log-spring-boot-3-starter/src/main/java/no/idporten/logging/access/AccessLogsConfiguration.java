@@ -48,8 +48,8 @@ public class AccessLogsConfiguration {
 
         log.info("Initialize accessLogsCustomizer for Tomcat Access Logging as JSON. Use config-file: {}", logbackConfigFile);
 
-        if (deprecatedTomcatAccessLogProperty != null && !deprecatedTomcatAccessLogProperty.equals("enabled")) { // deprecated property is set, and set to something else than 'enabled'
-            log.warn("Property 'tomcat.accesslog' is deprecated. Use 'server.tomcat.accesslog.enabled=false' instead.");
+        if (deprecatedTomcatAccessLogProperty != null && deprecatedTomcatAccessLogProperty.equals("disabled")) { // deprecated property is set to 'disabled'
+            log.warn("Property 'tomcat.accesslog' is deprecated. Use 'server.tomcat.accesslog.enabled=false' instead or remove if you need Tomcat access logging.");
         }
 
         return factory -> {
@@ -91,8 +91,8 @@ public class AccessLogsConfiguration {
      * Use application provided logback-access.xml if property digdir.access.logging.config-file is configured,
      * otherwise check if debug-level is configured.
      *
-     * @param configFile
-     * @param debug
+     * @param configFile logback-access.xml
+     * @param debug only used when configFile is default logback-access.xml
      */
     protected String checkIfDebugFeatureEnabledAndConfigureLogbackfile(String configFile, String debug) {
 
