@@ -12,6 +12,7 @@ jobs:
     uses: felleslosninger/github-workflows/.github/workflows/ci-maven-deploy.yml@main
     with:
       java-version: 17
+      sbom-path: ./idporten-access-log-spring-boot-3-starter/target/
       package-version: ${{ github.event.release.tag_name }}
       deployment-repository: ${{ github.repository }}
     secrets: inherit

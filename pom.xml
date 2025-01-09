@@ -12,7 +12,6 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>idporten-access-log-spring-boot-starter</module>
         <module>idporten-access-log-spring-boot-3-starter</module>
     </modules>
 
@@ -62,15 +61,6 @@
         </resources>
 
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.4.2</version>
-                <configuration> <!-- temporary fix for sbom-action not supporting multiple paths -->
-                    <outputDirectory>${maven.multiModuleProjectDirectory}/target/${project.artifactId}</outputDirectory>
-                </configuration>
-            </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
