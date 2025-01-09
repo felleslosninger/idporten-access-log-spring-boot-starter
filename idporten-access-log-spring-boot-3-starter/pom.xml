@@ -17,7 +17,7 @@
         <janino.version>3.1.12</janino.version>
         <logstash-logback-encoder.version>8.0</logstash-logback-encoder.version>
         <logback.version>1.5.16</logback.version>
-        <logback-access.version>2.0.5</logback-access.version>
+        <logback-access.version>2.0.6</logback-access.version>
     </properties>
 
     <dependencyManagement>
