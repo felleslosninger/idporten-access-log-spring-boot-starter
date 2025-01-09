@@ -47,44 +47,6 @@ And you probably already have included these:
 </dependency>
 ```
 
-### Spring Boot 2:
-Warning: This version is not maintained anymore, use Spring Boot 3 version instead.
-
-```xml
-<dependency>
-    <groupId>no.idporten.logging</groupId>
-    <artifactId>idporten-access-log-spring-boot-starter</artifactId>
-    <version>1.1.1</version>
-</dependency>
-```
-
-Also needs dependency:
-```xml
-<dependency>
-    <groupId>ch.qos.logback</groupId>
-    <artifactId>logback-access</artifactId>
-    <version>1.4.14</version>
-</dependency>
-```
-And you probably already have included these:
-```xml
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-web</artifactId>
-</dependency>
-<dependency>
-    <groupId>ch.qos.logback</groupId>
-    <artifactId>logback-classic</artifactId>
-</dependency>
-<dependency>
-    <groupId>net.logstash.logback</groupId>
-    <artifactId>logstash-logback-encoder</artifactId>
-</dependency>
-<dependency>
-    <groupId>io.opentelemetry.instrumentation</groupId>
-    <artifactId>opentelemetry-instrumentation-api</artifactId>
-</dependency>
-```
 
 ### Configuration
 The library is configured through the application.yml/yaml or the active spring profile yaml-file.
