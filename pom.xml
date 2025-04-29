@@ -21,7 +21,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <logstash.logback.version>8.1</logstash.logback.version>
+        <logstash-logback-encoder.version>8.1</logstash-logback-encoder.version>
         <logback-access.version>2.0.6</logback-access.version>     
         <opentelemetry-instrumentation.version>2.15.0</opentelemetry-instrumentation.version>
              
