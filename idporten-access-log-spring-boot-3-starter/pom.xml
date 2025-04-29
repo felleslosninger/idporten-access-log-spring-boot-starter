@@ -12,12 +12,7 @@
     </parent>
 
     <properties>
-        <tomcat.version>10.1.40</tomcat.version>
-        <spring-boot.version>3.4.1</spring-boot.version>
-        <janino.version>3.1.12</janino.version>
-        <logstash-logback-encoder.version>8.1</logstash-logback-encoder.version>
-        <logback.version>1.5.18</logback.version>
-        <logback-access.version>2.0.6</logback-access.version>
+        <spring-boot.version>3.4.5</spring-boot.version>
     </properties>
 
     <dependencyManagement>
@@ -28,21 +23,6 @@
                 <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-core</artifactId>
-                <version>${logback.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-classic</artifactId>
-                <version>${logback.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ch.qos.logback.access</groupId>
-                <artifactId>logback-access-common</artifactId>
-                <version>${logback-access.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -66,7 +46,6 @@
         <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-catalina</artifactId>
-            <version>${tomcat.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -83,7 +62,6 @@
         <dependency>
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
-            <version>${logstash-logback-encoder.version}</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -99,11 +77,10 @@
             <groupId>ch.qos.logback.access</groupId>
             <artifactId>logback-access-common</artifactId>
         </dependency>
-             
+
         <dependency>
             <groupId>org.codehaus.janino</groupId>
             <artifactId>janino</artifactId>
-            <version>${janino.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
