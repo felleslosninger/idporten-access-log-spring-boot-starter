@@ -4,15 +4,14 @@ import ch.qos.logback.access.common.spi.IAccessEvent;
 import com.fasterxml.jackson.core.JsonGenerator;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.SpanContext;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import no.idporten.logging.access.AccessLogFields;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-@Slf4j
-@RequiredArgsConstructor
 public class TraceIdAccessLogDecorator implements AccessLogDecorator {
+    Logger log = LoggerFactory.getLogger(TraceIdAccessLogDecorator.class);
 
     @Override
     public void writeTo(JsonGenerator jsonGenerator, IAccessEvent iAccessEvent) throws IOException {

@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <name>idporten-access-log-starter-pom</name>
-    <description>ID-porten access logg spring boot starter for Tomcat</description>
+    <description>Digdir access log Spring boot starter for Tomcat</description>
 
     <groupId>no.idporten.logging</groupId>
     <artifactId>idporten-access-log-pom</artifactId>
@@ -23,8 +23,7 @@
 
         <logstash-logback-encoder.version>8.1</logstash-logback-encoder.version>
         <logback-access.version>2.0.6</logback-access.version>
-        <opentelemetry-instrumentation.version>2.15.0</opentelemetry-instrumentation.version>
-
+        <open.telemetry.version>1.49.0</open.telemetry.version>
         <tomcat.version>10.1.40</tomcat.version>
         <janino.version>3.1.12</janino.version>
 
@@ -41,9 +40,9 @@
         <!-- ****************************** -->
         <dependencies>
             <dependency>
-                <groupId>io.opentelemetry.instrumentation</groupId>
-                <artifactId>opentelemetry-instrumentation-api</artifactId>
-                <version>${opentelemetry-instrumentation.version}</version>
+                <groupId>io.opentelemetry</groupId>
+                <artifactId>opentelemetry-api</artifactId>
+                <version>${open.telemetry.version}</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
