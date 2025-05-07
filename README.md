@@ -4,7 +4,7 @@
 [![Latest Stable Version](https://img.shields.io/github/v/release/felleslosninger/idporten-access-log-spring-boot-starter?display_name=tag)](https://github.com/felleslosninger/idporten-access-log-spring-boot-starter/releases)
 
 
-This spring boot starter is a library for Tomcat access log (version 9.0.X/10.0.X Tomcat) for Spring Boot project as JSON.
+This spring boot starter is a library for Tomcat access log (version 10.0.X Tomcat) for Spring Boot project as JSON.
 See [idporten-access-log-spring-boot-3-starter/src/main/resources/logback-access.xml](/idporten-access-log-spring-boot-3-starter/src/main/resources/logback-access.xml) for the syntax of logging.
 
 ## Requirements
@@ -23,28 +23,32 @@ mvn clean install
 
 
 ## Usage
-The library can be imported through maven with (see latest version under [releases](https://github.com/felleslosninger/idporten-access-log-spring-boot-starter/releases)):
+The library can be imported through Maven with (see latest version under [releases](https://github.com/felleslosninger/idporten-access-log-spring-boot-starter/releases)):
 
 ### Spring Boot 3:
 ```xml
 <dependency>
     <groupId>no.idporten.logging</groupId>
     <artifactId>idporten-access-log-spring-boot-3-starter</artifactId>
-    <version>2.7.2</version>
+    <version>2.8.0</version>
 </dependency>
 ```
 
 And you probably already have included these:
 ```xml
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-web</artifactId>
-</dependency>
-
-<dependency>
-    <groupId>io.opentelemetry.instrumentation</groupId>
-    <artifactId>opentelemetry-instrumentation-api</artifactId>
-</dependency>
+<dependencies>
+    
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    
+    <dependency>
+        <groupId>io.opentelemetry</groupId>
+        <artifactId>opentelemetry-api</artifactId>
+    </dependency>
+    
+</dependencies>
 ```
 
 

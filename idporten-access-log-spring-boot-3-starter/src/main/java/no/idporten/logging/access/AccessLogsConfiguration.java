@@ -1,10 +1,11 @@
 package no.idporten.logging.access;
 
-import lombok.extern.slf4j.Slf4j;
 import no.idporten.logging.access.decorator.AccessLogDecorators;
 import no.idporten.logging.access.decorator.SingleStringFieldAccessLogDecorator;
 import no.idporten.logging.access.decorator.TraceIdAccessLogDecorator;
 import no.idporten.logging.access.tomcat.LogbackValve;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -17,7 +18,6 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
-@Slf4j
 @Configuration
 @EnableConfigurationProperties(AccessLogsProperties.class)
 public class AccessLogsConfiguration {
@@ -25,6 +25,8 @@ public class AccessLogsConfiguration {
     protected static final String DEFAULT_LOGBACK_CONFIG_FILE = "logback-access.xml";
     protected static final String LOGBACK_CONFIG_REQ_FULL_FILE = "logback-access-req-full.xml";
     protected static final String LOGBACK_CONFIG_REQ_RESP_FULL_FILE = "logback-access-req-resp-full.xml";
+
+    Logger log = LoggerFactory.getLogger(AccessLogsConfiguration.class);
 
     @Value("${digdir.access.logging.config-file:logback-access.xml}")
     String logConfigfile;
