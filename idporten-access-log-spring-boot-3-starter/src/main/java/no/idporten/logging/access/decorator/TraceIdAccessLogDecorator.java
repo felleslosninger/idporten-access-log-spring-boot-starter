@@ -15,27 +15,46 @@ public class TraceIdAccessLogDecorator implements AccessLogDecorator {
 
     @Override
     public void writeTo(JsonGenerator jsonGenerator, IAccessEvent iAccessEvent) throws IOException {
-        String traceparent = iAccessEvent.getRequestHeader("traceparent");
-        //parent-id also known as span-id
 
-        // Fetch from request header first, otherwise from spancontext
-        if (traceparent != null && traceparent.contains("-") && traceparent.split("-").length == 4) {
-            String[] split = traceparent.split("-");
-            jsonGenerator.writeStringField(AccessLogFields.TRACE_ID, split[1]);
-            jsonGenerator.writeStringField(AccessLogFields.SPAN_ID, split[2]);
-        } else if (Span.current() != null && Span.current().getSpanContext() != null && Span.current().getSpanContext().getTraceId() != null) {
-            log.debug("traceparent not found as request header: {}", iAccessEvent);
+        String traceId = null;
+        String spanId = null;
+
+        // check request header
+        String traceparentValue = iAccessEvent.getRequestHeader("traceparent");
+        if (traceparentValue != null && traceparentValue.contains("-") && traceparentValue.split("-").length == 4) {
+            String[] split = traceparentValue.split("-");
+            traceId = split[1];
+            spanId = split[2];
+        }
+
+        // check trace context
+        if (isInvalid(traceId)) {
             SpanContext spanContext = Span.current().getSpanContext();
-            String traceId = spanContext.getTraceId();
-            if (traceId == null || traceId.isBlank()) {
-                log.debug("traceId not found in current span: {}", spanContext);
-                return;
+            traceId = spanContext.getTraceId();
+            spanId = spanContext.getSpanId();
+        }
+
+        // check request attribute
+        if(isInvalid(traceId)) {
+            traceparentValue = iAccessEvent.getAttribute("traceparent");
+            System.out.println("*** decorator " + traceparentValue);
+            if (traceparentValue != null && traceparentValue.contains("-") && traceparentValue.split("-").length == 4) { // check request header
+                String[] split = traceparentValue.split("-");
+                traceId = split[1];
+                spanId = split[2];
             }
-            String spanId = spanContext.getSpanId();
+        }
+
+        if(traceId != null && !traceId.isBlank()) { // emit trace_id - even if all zeroes.
             jsonGenerator.writeStringField(AccessLogFields.TRACE_ID, traceId);
             jsonGenerator.writeStringField(AccessLogFields.SPAN_ID, spanId);
         } else {
-            log.debug("traceparent not found as request header: {} or in spanContext: {}", iAccessEvent, Span.current().getSpanContext());
+            log.debug("traceparent not found as request header/attribute: {} or in spanContext: {}", iAccessEvent, Span.current().getSpanContext());
         }
     }
+
+    private boolean isInvalid(String traceId) {
+        return traceId == null || traceId.isBlank() || traceId.equals("00000000000000000000000000000000");
+    }
+
 }
