@@ -37,7 +37,6 @@ public class TraceIdAccessLogDecorator implements AccessLogDecorator {
         // check request attribute
         if(isInvalid(traceId)) {
             traceparentValue = iAccessEvent.getAttribute("traceparent");
-            System.out.println("*** decorator " + traceparentValue);
             if (traceparentValue != null && traceparentValue.contains("-") && traceparentValue.split("-").length == 4) { // check request header
                 String[] split = traceparentValue.split("-");
                 traceId = split[1];
