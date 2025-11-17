@@ -1,9 +1,7 @@
 package no.idporten.logging.access.decorator;
 
 import ch.qos.logback.access.common.spi.IAccessEvent;
-import com.fasterxml.jackson.core.JsonGenerator;
-
-import java.io.IOException;
+import tools.jackson.core.JsonGenerator;
 
 public class SingleStringFieldAccessLogDecorator implements AccessLogDecorator {
 
@@ -16,7 +14,7 @@ public class SingleStringFieldAccessLogDecorator implements AccessLogDecorator {
     }
 
     @Override
-    public void writeTo(JsonGenerator jsonGenerator, IAccessEvent iAccessEvent) throws IOException {
-        jsonGenerator.writeStringField(fieldName, value);
+    public void writeTo(JsonGenerator jsonGenerator, IAccessEvent iAccessEvent)  {
+        jsonGenerator.writeStringProperty(fieldName, value);
     }
 }
