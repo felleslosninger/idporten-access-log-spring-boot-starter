@@ -26,7 +26,7 @@
         <open.telemetry.version>1.55.0</open.telemetry.version>
         <tomcat.version>10.1.48</tomcat.version>
         <janino.version>3.1.12</janino.version>
-        <tools.jackson.version>3.0.1</tools.jackson.version>
+        <tools.jackson.version>3.0.2</tools.jackson.version>
         <jackson.annotations.version>2.20</jackson.annotations.version>
 
         <!-- maven plugins -->
