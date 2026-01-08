@@ -46,12 +46,12 @@
                 <version>${open.telemetry.version}</version>
                 <scope>provided</scope>
             </dependency>
+            <!--https://repo1.maven.org/maven2/ch/qos/logback/access/  -->
             <dependency>
                 <groupId>ch.qos.logback.access</groupId>
                 <artifactId>logback-access-common</artifactId>
                 <version>${logback-access.version}</version>
             </dependency>
-            <!-- https://mvnrepository.com/artifact/org.apache.tomcat/tomcat-catalina -->
         </dependencies>
     </dependencyManagement>
 
