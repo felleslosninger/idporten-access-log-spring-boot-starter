@@ -13,6 +13,7 @@
 
     <modules>
         <module>idporten-access-log-spring-boot-3-starter</module>
+        <module>idporten-access-log-spring-boot-4-starter</module>
     </modules>
 
     <properties>
@@ -21,13 +22,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <logstash-logback-encoder.version>9.0</logstash-logback-encoder.version>
+        <!-- logback-access: Review the changes in no.idporten.logging.access.tomcat.* before upgrading -->
+        <!-- Check LogbackValue and TomcatServerAdapter in both modules. -->
         <logback-access.version>2.0.7</logback-access.version>
         <open.telemetry.version>1.55.0</open.telemetry.version>
-        <tomcat.version>10.1.48</tomcat.version>
-        <janino.version>3.1.12</janino.version>
-        <tools.jackson.version>3.0.1</tools.jackson.version>
-        <jackson.annotations.version>2.20</jackson.annotations.version>
+
 
         <!-- maven plugins -->
         <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
@@ -47,37 +46,11 @@
                 <version>${open.telemetry.version}</version>
                 <scope>provided</scope>
             </dependency>
+            <!--https://repo1.maven.org/maven2/ch/qos/logback/access/  -->
             <dependency>
                 <groupId>ch.qos.logback.access</groupId>
                 <artifactId>logback-access-common</artifactId>
                 <version>${logback-access.version}</version>
-            </dependency>
-            <!-- https://mvnrepository.com/artifact/org.apache.tomcat/tomcat-catalina -->
-            <dependency>
-                <groupId>org.apache.tomcat</groupId>
-                <artifactId>tomcat-catalina</artifactId>
-                <version>${tomcat.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>net.logstash.logback</groupId>
-                <artifactId>logstash-logback-encoder</artifactId>
-                <version>${logstash-logback-encoder.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.codehaus.janino</groupId>
-                <artifactId>janino</artifactId>
-                <version>${janino.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>tools.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>${tools.jackson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-annotations</artifactId>
-                <version>${jackson.annotations.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -132,13 +105,11 @@
                 </configuration>
             </plugin>
 
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
                 <version>${maven-deploy-plugin.version}</version>
             </plugin>
-
         </plugins>
     </build>
 

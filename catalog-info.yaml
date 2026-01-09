@@ -1,0 +1,9 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: idporten-access-log-spring-boot-starter
+  description: Spring Boot starter for configuring Tomcat access logs
+spec:
+  type: library
+  lifecycle: production
+  owner: team-idporten
