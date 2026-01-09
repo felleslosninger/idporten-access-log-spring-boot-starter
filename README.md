@@ -34,12 +34,15 @@ mvn clean install
 ## Usage
 The library can be imported through Maven with (see latest version under [releases](https://github.com/felleslosninger/idporten-access-log-spring-boot-starter/releases)):
 
-### Spring Boot 3:
+### Spring Boot 3/4:
 ```xml
 <dependency>
     <groupId>no.idporten.logging</groupId>
+    <!-- Spring Boot 3.x -->
     <artifactId>idporten-access-log-spring-boot-3-starter</artifactId>
-    <version>2.8.0</version>
+    <!-- or Spring Boot 4.x -->
+    <artifactId>idporten-access-log-spring-boot-4-starter</artifactId>
+    <version>3.x.x</version>
 </dependency>
 ```
 
@@ -49,7 +52,10 @@ And you probably already have included these:
     
     <dependency>
         <groupId>org.springframework.boot</groupId>
+        <!-- Spring Boot 3.x -->
         <artifactId>spring-boot-starter-web</artifactId>
+        <!-- or Spring Boot 4.x -->
+        <artifactId>spring-boot-starter-webmvc</artifactId>
     </dependency>
     
     <dependency>
