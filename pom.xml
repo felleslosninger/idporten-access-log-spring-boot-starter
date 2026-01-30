@@ -24,7 +24,7 @@
 
         <!-- logback-access: Review the changes in no.idporten.logging.access.tomcat.* before upgrading -->
         <!-- Check LogbackValue and TomcatServerAdapter in both modules. -->
-        <logback-access.version>2.0.7</logback-access.version>
+        <logback-access.version>2.0.9</logback-access.version>
         <open.telemetry.version>1.58.0</open.telemetry.version>
 
 
