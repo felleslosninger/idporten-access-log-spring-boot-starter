@@ -16,7 +16,7 @@
         <logstash-logback-encoder.version>9.0</logstash-logback-encoder.version>
         <logback-access.version>2.0.9</logback-access.version>
         <logback-core.version>1.5.26</logback-core.version>
-        <logback-classic.version>1.5.26</logback-classic.version>
+        <logback-classic.version>1.5.27</logback-classic.version>
         <tomcat.version>11.0.15</tomcat.version>
     </properties>
 
