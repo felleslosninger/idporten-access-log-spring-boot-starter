@@ -1,9 +1,9 @@
-/**
+/*
  * Logback: the reliable, generic, fast and flexible logging framework.
- * Copyright (C) 1999-2015, QOS.ch. All rights reserved.
+ * Copyright (C) 1999-2026, QOS.ch. All rights reserved.
  *
  * This program and the accompanying materials are dual-licensed under
- * either the terms of the Eclipse Public License v1.0 as published by
+ * either the terms of the Eclipse Public License v2.0 as published by
  * the Eclipse Foundation
  *
  *   or (per the licensee's choosing)
@@ -14,6 +14,7 @@
 package no.idporten.logging.access.tomcat;
 
 import ch.qos.logback.access.common.spi.ServerAdapter;
+
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
 
@@ -37,7 +38,7 @@ public class TomcatServerAdapter implements ServerAdapter {
 
     @Override
     public long getContentLength() {
-        return response.getBytesWritten(false);
+        return response.getContentLength();
     }
 
     @Override

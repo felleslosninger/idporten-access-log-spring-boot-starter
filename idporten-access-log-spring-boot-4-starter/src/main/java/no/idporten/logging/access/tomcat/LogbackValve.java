@@ -1,9 +1,9 @@
-/**
+/*
  * Logback: the reliable, generic, fast and flexible logging framework.
- * Copyright (C) 1999-2015, QOS.ch. All rights reserved.
+ * Copyright (C) 1999-2026, QOS.ch. All rights reserved.
  *
  * This program and the accompanying materials are dual-licensed under
- * either the terms of the Eclipse Public License v1.0 as published by
+ * either the terms of the Eclipse Public License v2.0 as published by
  * the Eclipse Foundation
  *
  *   or (per the licensee's choosing)
@@ -13,22 +13,32 @@
  */
 package no.idporten.logging.access.tomcat;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.locks.ReentrantLock;
+
 import ch.qos.logback.access.common.AccessConstants;
 import ch.qos.logback.access.common.joran.JoranConfigurator;
 import ch.qos.logback.access.common.spi.AccessEvent;
 import ch.qos.logback.access.common.spi.IAccessEvent;
-import ch.qos.logback.core.*;
-import ch.qos.logback.core.boolex.EventEvaluator;
-import ch.qos.logback.core.filter.Filter;
-import ch.qos.logback.core.joran.spi.JoranException;
-import ch.qos.logback.core.spi.*;
-import ch.qos.logback.core.status.*;
-import ch.qos.logback.core.util.ExecutorServiceUtil;
-import ch.qos.logback.core.util.Loader;
-import ch.qos.logback.core.util.OptionHelper;
-import ch.qos.logback.core.util.StatusListenerConfigHelper;
+import ch.qos.logback.access.common.util.AccessCommonVersionUtil;
+import ch.qos.logback.core.spi.ConfigurationEvent;
+import ch.qos.logback.core.spi.ConfigurationEventListener;
+import ch.qos.logback.core.util.CoreVersionUtil;
+import ch.qos.logback.core.util.VersionUtil;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
+
 import org.apache.catalina.Lifecycle;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.LifecycleListener;
@@ -36,24 +46,43 @@ import org.apache.catalina.LifecycleState;
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
 import org.apache.catalina.valves.ValveBase;
+
+import ch.qos.logback.core.Appender;
+import ch.qos.logback.core.BasicStatusManager;
+import ch.qos.logback.core.Context;
+import ch.qos.logback.core.CoreConstants;
+import ch.qos.logback.core.LifeCycleManager;
+import ch.qos.logback.core.boolex.EventEvaluator;
+import ch.qos.logback.core.filter.Filter;
+import ch.qos.logback.core.joran.spi.JoranException;
+import ch.qos.logback.core.spi.AppenderAttachable;
+import ch.qos.logback.core.spi.AppenderAttachableImpl;
+import ch.qos.logback.core.spi.FilterAttachable;
+import ch.qos.logback.core.spi.FilterAttachableImpl;
+import ch.qos.logback.core.spi.FilterReply;
+import ch.qos.logback.core.spi.LifeCycle;
+import ch.qos.logback.core.spi.LogbackLock;
+import ch.qos.logback.core.spi.SequenceNumberGenerator;
+import ch.qos.logback.core.status.ErrorStatus;
+import ch.qos.logback.core.status.InfoStatus;
+import ch.qos.logback.core.status.OnConsoleStatusListener;
+import ch.qos.logback.core.status.Status;
+import ch.qos.logback.core.status.StatusManager;
+import ch.qos.logback.core.status.WarnStatus;
+import ch.qos.logback.core.util.ExecutorServiceUtil;
+import ch.qos.logback.core.util.Loader;
+import ch.qos.logback.core.util.OptionHelper;
+import ch.qos.logback.core.util.StatusListenerConfigHelper;
 import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.locks.ReentrantLock;
+//import org.apache.catalina.Lifecycle;
 
 
-// Find code here https://repo1.maven.org/maven2/ch/qos/logback/access/logback-access-tomcat/2.0.7/
-// https://github.com/qos-ch/logback-access/blob/v_2.0.7/logback-access-tomcat/src/main/java/ch/qos/logback/access/tomcat/TomcatServerAdapter.java
+// Find code here https://repo1.maven.org/maven2/ch/qos/logback/access/logback-access-tomcat/2.0.9/
+// https://github.com/qos-ch/logback-access/blob/v_2.0.9/logback-access-tomcat/src/main/java/ch/qos/logback/access/tomcat/TomcatServerAdapter.java
 // This class replaces ch.qos.logback.access.tomcat.LogbackValve
-// This class is checked and conforms to version 2.0.7 of LogbackValve above.
+// This class is checked and conforms to version 2.0.9 of LogbackValve above.
 //
 // And it is not a very much better idea to override this class because of all the instance variables,
 // especially hard with 'aai'. Causes you to include most of this anyway.
@@ -63,13 +92,13 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * This class is an implementation of tomcat's Valve interface, by extending
  * ValveBase.
- * 
+ *
  * <p>
  * For more information on using LogbackValve please refer to the online
  * documentation on
  * <a href="http://logback.qos.ch/access.html#tomcat">logback-access and
  * tomcat</a>.
- * 
+ *
  * @author Ceki G&uuml;lc&uuml;
  * @author S&eacute;bastien Pennec
  */
@@ -131,6 +160,9 @@ public class LogbackValve extends ValveBase
 
     @Override
     public void startInternal() throws LifecycleException {
+
+        versionCheck();
+
         scheduledExecutorService = ExecutorServiceUtil.newScheduledExecutorService();
 
         String filename;
@@ -168,6 +200,23 @@ public class LogbackValve extends ValveBase
 
         started = true;
         setState(LifecycleState.STARTING);
+    }
+
+    static String LOGBACK_ACCESS_TOMCAT_NAME = "logback-access-tomcat";
+    static String LOGBACK_ACCESS_COMMON_NAME = "logback-access-common";
+    static String LOGBACK_CORE_NAME = "logback-core";
+
+    private void versionCheck() {
+        try {
+            String coreVersion = CoreVersionUtil.getCoreVersionBySelfDeclaredProperties();
+            String accessCommonVersion = AccessCommonVersionUtil.getAccessCommonVersionBySelfDeclaredProperties();
+            VersionUtil.checkForVersionEquality(this, this.getClass(), accessCommonVersion, LOGBACK_ACCESS_TOMCAT_NAME, LOGBACK_ACCESS_COMMON_NAME);
+            VersionUtil.compareExpectedAndFoundVersion(this, coreVersion, AccessConstants.class, accessCommonVersion, LOGBACK_ACCESS_COMMON_NAME, LOGBACK_CORE_NAME);
+        } catch(NoClassDefFoundError e) {
+            addWarn("Missing ch.logback.core.util.VersionUtil class on classpath. The version of logback-core is probably earlier than 1.5.25.");
+        } catch(NoSuchMethodError e) {
+            addWarn(e.getMessage() + ". The version of logback-core is probably earlier than 1.5.26.");
+        }
     }
 
     private URL fileToUrl(File configFile) {
@@ -375,13 +424,13 @@ public class LogbackValve extends ValveBase
     }
 
     @Override
-    public void putProperty(String key, String val) {
-        this.propertyMap.put(key, val);
+    public void addSubstitutionProperty(String key, String value) {
+        this.propertyMap.put(key, value);
     }
 
     @Override
-    public void addSubstitutionProperty(String key, String value) {
-        putProperty(key, value);
+    public void putProperty(String key, String val) {
+        this.propertyMap.put(key, val);
     }
 
     @Override
