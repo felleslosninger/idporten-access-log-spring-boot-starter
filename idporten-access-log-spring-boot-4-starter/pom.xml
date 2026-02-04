@@ -14,6 +14,9 @@
     <properties>
         <spring-boot.version>4.0.1</spring-boot.version>
         <logstash-logback-encoder.version>9.0</logstash-logback-encoder.version>
+        <logback-access.version>2.0.9</logback-access.version>
+        <logback-core.version>1.5.26</logback-core.version>
+        <logback-classic.version>1.5.26</logback-classic.version>
         <tomcat.version>11.0.15</tomcat.version>
     </properties>
 
@@ -69,16 +72,20 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
+            <version>${logback-core.version}</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
+            <version>${logback-classic.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback.access</groupId>
             <artifactId>logback-access-common</artifactId>
+            <version>${logback-access.version}</version>
         </dependency>
     </dependencies>
     <build>
