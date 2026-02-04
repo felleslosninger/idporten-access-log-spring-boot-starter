@@ -12,7 +12,7 @@
     </parent>
 
     <properties>
-        <spring-boot.version>4.0.1</spring-boot.version>
+        <spring-boot.version>4.0.2</spring-boot.version>
         <logstash-logback-encoder.version>9.0</logstash-logback-encoder.version>
         <logback-access.version>2.0.9</logback-access.version>
         <logback-core.version>1.5.26</logback-core.version>
@@ -75,7 +75,6 @@
             <version>${logback-core.version}</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
