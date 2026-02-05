@@ -7,22 +7,22 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.web.context.annotation.ApplicationScope;
 import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 
-@Component
-@ApplicationScope
 public class StaticResourcesFilter extends Filter<IAccessEvent> {
 
     private static final Logger LOG = LoggerFactory.getLogger(StaticResourcesFilter.class);
 
-    private final StaticResourcesFilterProperties properties;
+    private static StaticResourcesFilterProperties properties;
 
-    public StaticResourcesFilter(StaticResourcesFilterProperties properties) {
-        this.properties = properties;
+    //fixme: @injection fungerte ikkje, brute-force her fungerer, men fortsatt ikkje heilt bra..
+    public static void setProperties(StaticResourcesFilterProperties props) {
+        properties = props;
+        LOG.debug("Configured with properties: paths={}, staticResources={}",
+                props != null ? props.paths() : null,
+                props != null ? props.staticResources() : null);
+        //fixme: before merge
     }
 
     @Override
