@@ -7,18 +7,19 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.ApplicationScope;
 import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 
+@Component
+@ApplicationScope
 public class StaticResourcesFilter extends Filter<IAccessEvent> {
 
     private static final Logger LOG = LoggerFactory.getLogger(StaticResourcesFilter.class);
 
     private final StaticResourcesFilterProperties properties;
-
-    public StaticResourcesFilter() {
-        this.properties = null;
-    }
 
     public StaticResourcesFilter(StaticResourcesFilterProperties properties) {
         this.properties = properties;
