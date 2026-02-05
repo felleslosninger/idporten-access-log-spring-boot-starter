@@ -14,21 +14,13 @@ public class StaticResourcesFilter extends Filter<IAccessEvent> {
 
     private static final Logger LOG = LoggerFactory.getLogger(StaticResourcesFilter.class);
 
-    private static StaticResourcesFilterProperties properties;
-
-    //fixme: @injection fungerte ikkje, brute-force her fungerer, men fortsatt ikkje heilt bra..
-    public static void setProperties(StaticResourcesFilterProperties props) {
-        properties = props;
-        LOG.debug("Configured with properties: paths={}, staticResources={}",
-                props != null ? props.paths() : null,
-                props != null ? props.staticResources() : null);
-        //fixme: before merge
-    }
-
     @Override
     public FilterReply decide(IAccessEvent accessEvent) {
+
+        final var properties = StaticResourcesFilterConfiguration.getProperties();
+
         if (properties == null) {
-            LOG.debug("No properties configured, allowing request");
+            LOG.debug("No filter configuration set, continuing without further processing");
             return FilterReply.NEUTRAL;
         }
 

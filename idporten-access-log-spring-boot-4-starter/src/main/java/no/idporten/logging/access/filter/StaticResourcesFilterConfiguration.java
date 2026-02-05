@@ -8,15 +8,13 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties(value = StaticResourcesFilterProperties.class)
 public class StaticResourcesFilterConfiguration {
 
-    private final StaticResourcesFilterProperties properties;
+    private static StaticResourcesFilterProperties properties;
 
     public StaticResourcesFilterConfiguration(StaticResourcesFilterProperties properties) {
-        this.properties = properties;
+        StaticResourcesFilterConfiguration.properties = properties;
     }
 
-    @PostConstruct
-    public void init() {
-        //fixme: ikkje bra
-        StaticResourcesFilter.setProperties(properties);
+    public static StaticResourcesFilterProperties getProperties() {
+        return properties;
     }
 }
