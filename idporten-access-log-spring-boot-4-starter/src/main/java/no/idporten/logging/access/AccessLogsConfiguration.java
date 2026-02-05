@@ -3,7 +3,6 @@ package no.idporten.logging.access;
 import no.idporten.logging.access.decorator.AccessLogDecorators;
 import no.idporten.logging.access.decorator.SingleStringFieldAccessLogDecorator;
 import no.idporten.logging.access.decorator.TraceIdAccessLogDecorator;
-import no.idporten.logging.access.tomcat.LogbackValve;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +15,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
 
 @Configuration
 @EnableConfigurationProperties(AccessLogsProperties.class)
@@ -34,12 +32,6 @@ public class AccessLogsConfiguration {
     @Value("${digdir.access.logging.debug-level:}")
     String debugLevel;
 
-    @Value("${digdir.access.logging.filtering.static-resources:true}")
-    boolean filterStaticResources;
-
-    @Value("${digdir.access.logging.filtering.paths:}")
-    List<String> filterPaths;
-
     @Value("${tomcat.accesslog:}")
     String deprecatedTomcatAccessLogProperty;
 
@@ -55,11 +47,9 @@ public class AccessLogsConfiguration {
         }
 
         return factory -> {
-            var logbackValve = new LogbackValve();
+            var logbackValve = new ch.qos.logback.access.tomcat.LogbackValve();
             logbackValve.setFilename(logbackConfigFile);
             logbackValve.setAsyncSupported(true);
-            logbackValve.setFilterStaticResources(filterStaticResources);
-            logbackValve.setFilterPaths(filterPaths);
             factory.addContextValves(logbackValve);
         };
     }

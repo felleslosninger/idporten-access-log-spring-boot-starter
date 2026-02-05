@@ -2,6 +2,7 @@
 <configuration debug="false">
     <property resource="application.yaml" />
     <property resource="application.yml" />
+    <filter class="no.idporten.logging.access.filter.StaticResourcesFilter"/>
     <appender name="accessJsonConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="net.logstash.logback.encoder.AccessEventCompositeJsonEncoder">
             <providers>

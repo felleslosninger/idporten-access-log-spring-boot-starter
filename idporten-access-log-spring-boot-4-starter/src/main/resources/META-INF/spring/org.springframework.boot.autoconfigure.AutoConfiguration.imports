@@ -1,1 +1,2 @@
 no.idporten.logging.access.AccessLogsConfiguration
+no.idporten.logging.access.filter.StaticResourcesFilterConfiguration
