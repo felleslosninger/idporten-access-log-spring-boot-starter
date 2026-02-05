@@ -86,6 +86,7 @@
             <artifactId>logback-access-tomcat</artifactId>
             <version>${logback-access.version}</version>
         </dependency>
+        <!-- TODO: finn ut om redundant -->
         <!--
         <dependency>
             <groupId>ch.qos.logback.access</groupId>

@@ -22,6 +22,7 @@ public class StaticResourcesFilter extends Filter<IAccessEvent> {
         LOG.debug("Configured with properties: paths={}, staticResources={}",
                 props != null ? props.paths() : null,
                 props != null ? props.staticResources() : null);
+        //fixme: before merge
     }
 
     @Override
