@@ -83,7 +83,7 @@
         </dependency>
         <dependency>
             <groupId>ch.qos.logback.access</groupId>
-            <artifactId>logback-access-common</artifactId>
+            <artifactId>logback-access-tomcat</artifactId>
             <version>${logback-access.version}</version>
         </dependency>
     </dependencies>
