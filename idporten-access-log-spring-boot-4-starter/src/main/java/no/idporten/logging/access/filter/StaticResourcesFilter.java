@@ -26,7 +26,7 @@ public class StaticResourcesFilter extends Filter<IAccessEvent> {
         final HttpServletRequest request = accessEvent.getRequest();
         final HttpServletResponse response = accessEvent.getResponse();
 
-        // consider filtering logs on successful responses
+        // Only filter logs for successful responses (status < 400)
         if (response.getStatus() < 400) {
             if (filterStaticResources) {
                 // handle application static resources
