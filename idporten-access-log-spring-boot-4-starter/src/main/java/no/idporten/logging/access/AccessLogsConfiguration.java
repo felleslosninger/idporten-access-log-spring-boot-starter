@@ -1,8 +1,10 @@
 package no.idporten.logging.access;
 
+import ch.qos.logback.access.tomcat.LogbackValve;
 import no.idporten.logging.access.decorator.AccessLogDecorators;
 import no.idporten.logging.access.decorator.SingleStringFieldAccessLogDecorator;
 import no.idporten.logging.access.decorator.TraceIdAccessLogDecorator;
+import no.idporten.logging.access.filter.StaticResourcesFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +21,7 @@ import java.util.List;
 
 
 @Configuration
-@EnableConfigurationProperties({AccessLogsProperties.class})
+@EnableConfigurationProperties(AccessLogsProperties.class)
 public class AccessLogsConfiguration {
 
     protected static final String DEFAULT_LOGBACK_CONFIG_FILE = "logback-access.xml";
@@ -54,13 +56,12 @@ public class AccessLogsConfiguration {
             log.warn("Property 'tomcat.accesslog' is deprecated. Use 'server.tomcat.accesslog.enabled=false' instead or remove if you need Tomcat access logging.");
         }
 
-
         return factory -> {
-            var logbackValve = new ch.qos.logback.access.tomcat.LogbackValve();
+            var logbackValve = new LogbackValve();
             logbackValve.setFilename(logbackConfigFile);
             logbackValve.setAsyncSupported(true);
 
-            var staticResourcesFilter = new no.idporten.logging.access.filter.StaticResourcesFilter(filterPaths, filterStaticResources);
+            var staticResourcesFilter = new StaticResourcesFilter(filterPaths, filterStaticResources);
             logbackValve.addFilter(staticResourcesFilter);
             staticResourcesFilter.start();
             factory.addContextValves(logbackValve);
