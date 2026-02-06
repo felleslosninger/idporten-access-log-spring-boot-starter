@@ -14,10 +14,15 @@ public class StaticResourcesFilter extends Filter<IAccessEvent> {
 
     private static final Logger LOG = LoggerFactory.getLogger(StaticResourcesFilter.class);
 
+    private final StaticResourcesFilterProperties properties;
+
+    public StaticResourcesFilter(StaticResourcesFilterProperties properties) {
+        this.properties = properties;
+    }
+
     @Override
     public FilterReply decide(IAccessEvent accessEvent) {
 
-        final var properties = StaticResourcesFilterConfiguration.getProperties();
 
         if (properties == null) {
             LOG.debug("No filter configuration set, continuing without further processing");
@@ -25,7 +30,7 @@ public class StaticResourcesFilter extends Filter<IAccessEvent> {
         }
 
         final var filterPaths = properties.paths();
-        final var filterStaticResources = properties.staticResources();
+        final var filterStaticResources = safeBoolean(properties.staticResources());
 
         final HttpServletRequest request = accessEvent.getRequest();
         final HttpServletResponse response = accessEvent.getResponse();
@@ -53,5 +58,9 @@ public class StaticResourcesFilter extends Filter<IAccessEvent> {
         }
 
         return FilterReply.NEUTRAL; //no-op
+    }
+
+    private boolean safeBoolean(Boolean input) {
+        return Boolean.TRUE.equals(input);
     }
 }
