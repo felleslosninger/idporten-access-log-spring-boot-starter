@@ -5,38 +5,28 @@ import ch.qos.logback.core.filter.Filter;
 import ch.qos.logback.core.spi.FilterReply;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 
+import java.util.List;
+
 public class StaticResourcesFilter extends Filter<IAccessEvent> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(StaticResourcesFilter.class);
+    private final List<String> filterPaths;
+    private final boolean filterStaticResources;
 
-    private final StaticResourcesFilterProperties properties;
-
-    public StaticResourcesFilter(StaticResourcesFilterProperties properties) {
-        this.properties = properties;
+    public StaticResourcesFilter(List<String> filterPaths, boolean filterStaticResources) {
+        this.filterPaths = filterPaths;
+        this.filterStaticResources = filterStaticResources;
     }
 
     @Override
     public FilterReply decide(IAccessEvent accessEvent) {
 
-
-        if (properties == null) {
-            LOG.debug("No filter configuration set, continuing without further processing");
-            return FilterReply.NEUTRAL;
-        }
-
-        final var filterPaths = properties.paths();
-        final var filterStaticResources = safeBoolean(properties.staticResources());
-
         final HttpServletRequest request = accessEvent.getRequest();
         final HttpServletResponse response = accessEvent.getResponse();
 
-
-        // consider filtering logs on successful responses
+        // Only filter logs for successful responses (status < 400)
         if (response.getStatus() < 400) {
             if (filterStaticResources) {
                 // handle application static resources
@@ -58,9 +48,5 @@ public class StaticResourcesFilter extends Filter<IAccessEvent> {
         }
 
         return FilterReply.NEUTRAL; //no-op
-    }
-
-    private boolean safeBoolean(Boolean input) {
-        return Boolean.TRUE.equals(input);
     }
 }
