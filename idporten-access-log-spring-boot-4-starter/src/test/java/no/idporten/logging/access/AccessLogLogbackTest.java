@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(classes = {MockApplication.class})
-class AccessLogLogbackIT {
+class AccessLogLogbackTest {
 
     @LocalServerPort
     private int port;

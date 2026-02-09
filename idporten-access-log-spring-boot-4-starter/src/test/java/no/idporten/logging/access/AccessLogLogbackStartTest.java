@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(classes = {MockApplication.class})
-class AccessLogLogbackStartIT {
+class AccessLogLogbackStartTest {
 
     private static ByteArrayOutputStream outContent;
     private static ByteArrayOutputStream errContent;
