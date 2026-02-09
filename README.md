@@ -12,7 +12,7 @@ See [idporten-access-log-spring-boot-4-starter/src/main/resources/logback-access
 ## Provided artifacts
 From stable version ``3.0.0`` the following artifacts are provided:
 
-| Package Coordinates                                             | Description     | 
+| Package Coordinates                                             | Description     |
 |-----------------------------------------------------------------|-----------------|
 | `no.idporten.logging.idporten-access-log-spring-boot-3-starter` | Spring Boot 3.x |
 | `no.idporten.logging.idporten-access-log-spring-boot-4-starter` | Spring Boot 4.x |
@@ -23,6 +23,8 @@ To build and run the application you need:
 * JDK 17
 * Maven
 * Spring Boot 3.x
+  * logback 1.5.22
+  * logback-access 2.0.7
 * Spring Boot 4.0.2
   * logback 1.5.25
   * logback-access 2.0.9

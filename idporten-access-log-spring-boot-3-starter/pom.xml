@@ -11,9 +11,17 @@
         <version>DEV-SNAPSHOT</version>
     </parent>
 
+    <!--
+     A note on upgrading: When upgrading spring-boot-starter or-logback-classes, ensure
+     both artifacts have logback dependencies that is compatible.
+
+     Even when upgrading **patch versions** of these components, might break compatibility.
+     -->
+
     <properties>
         <spring-boot.version>3.4.13</spring-boot.version>
         <logstash-logback-encoder.version>8.1</logstash-logback-encoder.version>
+        <logback-access.version>2.0.7</logback-access.version>
         <tomcat.version>10.1.40</tomcat.version>
     </properties>
 
@@ -75,11 +83,13 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
+            <!-- provided by spring-starter-logging -->
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback.access</groupId>
-            <artifactId>logback-access-common</artifactId>
+            <artifactId>logback-access-tomcat</artifactId>
+            <version>${logback-access.version}</version>
         </dependency>
     </dependencies>
     <build>

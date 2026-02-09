@@ -1,9 +1,10 @@
 package no.idporten.logging.access;
 
+import ch.qos.logback.access.tomcat.LogbackValve;
 import no.idporten.logging.access.decorator.AccessLogDecorators;
 import no.idporten.logging.access.decorator.SingleStringFieldAccessLogDecorator;
 import no.idporten.logging.access.decorator.TraceIdAccessLogDecorator;
-import no.idporten.logging.access.tomcat.LogbackValve;
+import no.idporten.logging.access.filter.StaticResourcesFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -58,8 +59,10 @@ public class AccessLogsConfiguration {
             var logbackValve = new LogbackValve();
             logbackValve.setFilename(logbackConfigFile);
             logbackValve.setAsyncSupported(true);
-            logbackValve.setFilterStaticResources(filterStaticResources);
-            logbackValve.setFilterPaths(filterPaths);
+
+            var staticResourcesFilter = new StaticResourcesFilter(filterPaths, filterStaticResources);
+            logbackValve.addFilter(staticResourcesFilter);
+            staticResourcesFilter.start();
             factory.addContextValves(logbackValve);
         };
     }
