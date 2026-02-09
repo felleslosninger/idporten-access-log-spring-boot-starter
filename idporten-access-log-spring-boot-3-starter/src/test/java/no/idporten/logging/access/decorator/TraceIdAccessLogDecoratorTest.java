@@ -2,7 +2,7 @@ package no.idporten.logging.access.decorator;
 
 import ch.qos.logback.access.common.spi.IAccessEvent;
 import com.fasterxml.jackson.core.JsonGenerator;
-import no.idporten.logging.access.AccessLogFields;
+import no.idporten.logging.access.common.AccessLogFields;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;

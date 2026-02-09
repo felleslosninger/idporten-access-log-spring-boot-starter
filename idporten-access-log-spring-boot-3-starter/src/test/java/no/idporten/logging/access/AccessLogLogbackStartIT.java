@@ -1,9 +1,6 @@
 package no.idporten.logging.access;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -14,7 +11,7 @@ import java.io.PrintStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(classes = {MockApplication.class})
 class AccessLogLogbackStartIT {
 
@@ -22,6 +19,8 @@ class AccessLogLogbackStartIT {
     private static ByteArrayOutputStream errContent;
     private static PrintStream originalOut;
     private static PrintStream originalErr;
+
+    public static final String ACCESS_JSON_APPENDER_NAME = "accessJsonConsoleAppender"; //ref logback-access.xml
 
     @DynamicPropertySource
     static void dynamicProperties(DynamicPropertyRegistry registry) {
@@ -52,23 +51,37 @@ class AccessLogLogbackStartIT {
         System.out.println("Captured stderr:\n" + errContent.toString());
     }
 
-    @Test
-    @DisplayName("Given the Spring context has started, logs shall not contain logback appender warnings")
-    void startupShouldNeverContainNotReferencedAppender() {
+    @BeforeEach
+    void flushBefore() {
         System.out.flush();
         System.err.flush();
+    }
+
+    @Test
+    @DisplayName("Given the Spring context has started, expect logs to not contain logback appender warnings")
+    void startupShouldContainReferencedAppender() {
+        String stdout = outContent.toString();
+        String stderr = errContent.toString();
+
+        String combinedOutput = stdout + stderr;
+
+        assertThat(combinedOutput).isNotBlank();
+        assertThat(combinedOutput).contains("Processing appender named [" + ACCESS_JSON_APPENDER_NAME + "]");
+    }
+
+    @Test
+    @DisplayName("Given the Spring context has started, expect logs to not contain logback appender errors")
+    void startupShouldNeverContainNotReferencedAppender() {
 
         String stdout = outContent.toString();
         String stderr = errContent.toString();
 
         String combinedOutput = stdout + stderr;
 
-        assertThat(combinedOutput).isNotBlank(); // should never be empty
+        assertThat(combinedOutput).isNotBlank(); // spring should have started
         assertThat(combinedOutput)
-                .as("logback-access should have referenced [accessJsonConsoleAppender], but failed to do so")
-                .doesNotContain("Appender named [accessJsonConsoleAppender] not referenced");
+                .doesNotContain("Appender named [" + ACCESS_JSON_APPENDER_NAME + "] not referenced");
         assertThat(combinedOutput)
-                .as("logback-access could not find [accessJsonConsoleAppender], causes log collection to silently fail")
-                .doesNotContain("Appender named [accessJsonConsoleAppender] could not be found.");
+                .doesNotContain("Appender named [" + ACCESS_JSON_APPENDER_NAME + "] could not be found.");
     }
 }

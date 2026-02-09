@@ -2,6 +2,7 @@ package no.idporten.logging.access;
 
 import ch.qos.logback.access.common.spi.IAccessEvent;
 import com.fasterxml.jackson.core.JsonGenerator;
+import no.idporten.logging.access.common.AccessLogFields;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

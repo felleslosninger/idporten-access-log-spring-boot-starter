@@ -3,7 +3,7 @@ package no.idporten.logging.access.decorator;
 import ch.qos.logback.access.common.spi.IAccessEvent;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.SpanContext;
-import no.idporten.logging.access.AccessLogFields;
+import no.idporten.logging.access.common.AccessLogFields;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tools.jackson.core.JsonGenerator;

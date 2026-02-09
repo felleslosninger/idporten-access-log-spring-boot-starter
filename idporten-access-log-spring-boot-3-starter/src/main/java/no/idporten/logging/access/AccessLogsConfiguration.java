@@ -1,6 +1,7 @@
 package no.idporten.logging.access;
 
 import ch.qos.logback.access.tomcat.LogbackValve;
+import no.idporten.logging.access.common.AccessLogFields;
 import no.idporten.logging.access.decorator.AccessLogDecorators;
 import no.idporten.logging.access.decorator.SingleStringFieldAccessLogDecorator;
 import no.idporten.logging.access.decorator.TraceIdAccessLogDecorator;

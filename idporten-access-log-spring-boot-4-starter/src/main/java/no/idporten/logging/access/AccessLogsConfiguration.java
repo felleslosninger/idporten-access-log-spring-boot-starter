@@ -1,6 +1,7 @@
 package no.idporten.logging.access;
 
 import ch.qos.logback.access.tomcat.LogbackValve;
+import no.idporten.logging.access.common.AccessLogFields;
 import no.idporten.logging.access.decorator.AccessLogDecorators;
 import no.idporten.logging.access.decorator.SingleStringFieldAccessLogDecorator;
 import no.idporten.logging.access.decorator.TraceIdAccessLogDecorator;
@@ -76,7 +77,7 @@ public class AccessLogsConfiguration {
     @Bean
     @Order(1)
     public SingleStringFieldAccessLogDecorator appNameAccessLogDecorator(AccessLogsProperties properties) {
-        return new SingleStringFieldAccessLogDecorator(AccessLogFields.APP_NAME,
+        return new SingleStringFieldAccessLogDecorator(no.idporten.logging.access.common.AccessLogFields.APP_NAME,
                 StringUtils.hasText(properties.getName()) ? properties.getName() : "");
     }
 

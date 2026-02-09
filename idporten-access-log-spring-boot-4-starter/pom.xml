@@ -41,6 +41,11 @@
     <!-- ****************************** -->
     <dependencies>
         <dependency>
+            <groupId>no.idporten.logging</groupId>
+            <artifactId>idporten-access-log-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
             <scope>provided</scope>
