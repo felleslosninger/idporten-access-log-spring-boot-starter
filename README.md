@@ -5,25 +5,23 @@
 
 
 This project provides Spring Boot starter modules configuring Tomcat access logs in JSON (version 10.0.x and 11.0.x).
-See [idporten-access-log-spring-boot-3-starter/src/main/resources/logback-access.xml](/idporten-access-log-spring-boot-3-starter/src/main/resources/logback-access.xml) for the syntax of logging.
-See [idporten-access-log-spring-boot-4-starter/src/main/resources/logback-access.xml](/idporten-access-log-spring-boot-3-starter/src/main/resources/logback-access.xml) for the syntax of logging.
-
+See [idporten-access-log-common/src/main/resources/logback-access.xml](/idporten-access-log-spring-boot-3-starter/src/main/resources/logback-access.xml) for the syntax of logging.
 
 ## Provided artifacts
 From stable version ``3.0.0`` the following artifacts are provided:
 
-| Package Coordinates                                             | Description     |
-|-----------------------------------------------------------------|-----------------|
-| `no.idporten.logging.idporten-access-log-spring-boot-3-starter` | Spring Boot 3.x |
-| `no.idporten.logging.idporten-access-log-spring-boot-4-starter` | Spring Boot 4.x |
+| Package Coordinates                                             | Description             |
+|-----------------------------------------------------------------|-------------------------|
+| `no.idporten.logging.idporten-access-log-spring-boot-3-starter` | Spring Boot 3.4.x/3.5.x |
+| `no.idporten.logging.idporten-access-log-spring-boot-4-starter` | Spring Boot 4.0.x       |
 ## Requirements
 
 To build and run the application you need:
 
 * JDK 17
 * Maven
-* Spring Boot 3.x
-  * logback 1.5.22
+* Spring Boot 3.4.x/3.5.x
+  * logback 1.5.20
   * logback-access 2.0.7
 * Spring Boot 4.0.2
   * logback 1.5.25
@@ -46,6 +44,7 @@ The library can be imported through Maven with (see latest version under [releas
     <groupId>no.idporten.logging</groupId>
     <!-- Spring Boot 3.x -->
     <artifactId>idporten-access-log-spring-boot-3-starter</artifactId>
+    <version>3.x.x</version>
     <!-- or Spring Boot 4.x -->
     <artifactId>idporten-access-log-spring-boot-4-starter</artifactId>
     <version>3.x.x</version>
