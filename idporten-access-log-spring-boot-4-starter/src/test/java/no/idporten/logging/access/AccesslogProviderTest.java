@@ -1,9 +1,9 @@
 package no.idporten.logging.access;
 
 import ch.qos.logback.access.common.spi.IAccessEvent;
+import no.idporten.logging.access.common.AccessLogFields;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import tools.jackson.core.JsonGenerator;
@@ -36,10 +36,10 @@ class AccesslogProviderTest {
         String traceparent = String.format("00-%s-%s-%s", traceId, spanId, traceFlags);
         when(event.getRequestHeader("traceparent")).thenReturn(traceparent);
         provider.writeTo(generator, event);
-        verify(generator).writeStringProperty(AccessLogFields.TRACE_ID, traceId);
-        verify(generator).writeStringProperty(AccessLogFields.SPAN_ID, spanId);
-        verify(generator).writeStringProperty(AccessLogFields.APP_NAME, "");
-        verify(generator).writeStringProperty(AccessLogFields.APP_ENV, "");
+        verify(generator).writeStringProperty(no.idporten.logging.access.common.AccessLogFields.TRACE_ID, traceId);
+        verify(generator).writeStringProperty(no.idporten.logging.access.common.AccessLogFields.SPAN_ID, spanId);
+        verify(generator).writeStringProperty(no.idporten.logging.access.common.AccessLogFields.APP_NAME, "");
+        verify(generator).writeStringProperty(no.idporten.logging.access.common.AccessLogFields.APP_ENV, "");
     }
 
     @DisplayName("When no traceparent in request header and opentelemetry agent not enabled, then log from spancontext default traceid")
@@ -47,9 +47,9 @@ class AccesslogProviderTest {
     void whenNoTraceparentInHeaderDoNotWriteToLog() {
         provider.writeTo(generator, event);
         verify(generator, atMost(5)).writeStringProperty(anyString(), anyString());
-        verify(generator).writeStringProperty(AccessLogFields.APP_NAME, "");
-        verify(generator).writeStringProperty(AccessLogFields.APP_ENV, "");
-        verify(generator).writeStringProperty(AccessLogFields.TRACE_ID, TRACE_ID_DEFAULT);
+        verify(generator).writeStringProperty(no.idporten.logging.access.common.AccessLogFields.APP_NAME, "");
+        verify(generator).writeStringProperty(no.idporten.logging.access.common.AccessLogFields.APP_ENV, "");
+        verify(generator).writeStringProperty(no.idporten.logging.access.common.AccessLogFields.TRACE_ID, TRACE_ID_DEFAULT);
         verify(generator).writeStringProperty(AccessLogFields.SPAN_ID, SPAN_ID_DEFAULT);
     }
 }

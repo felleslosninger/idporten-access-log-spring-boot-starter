@@ -26,4 +26,14 @@ public class TestController {
     public ResponseEntity<String> noBody() {
         return ResponseEntity.ok(null);
     }
+
+    @GetMapping("/health")
+    public ResponseEntity<String> health() {
+        return ResponseEntity.ok("UP");
+    }
+
+    @GetMapping("/info")
+    public ResponseEntity<String> info() {
+        return ResponseEntity.ok("OK");
+    }
 }

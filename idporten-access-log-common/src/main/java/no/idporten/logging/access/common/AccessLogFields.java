@@ -1,4 +1,4 @@
-package no.idporten.logging.access;
+package no.idporten.logging.access.common;
 
 public class AccessLogFields {
 

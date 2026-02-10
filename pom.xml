@@ -12,6 +12,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>idporten-access-log-common</module>
         <module>idporten-access-log-spring-boot-3-starter</module>
         <module>idporten-access-log-spring-boot-4-starter</module>
     </modules>
@@ -22,9 +23,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <!-- logback-access: Review the changes in no.idporten.logging.access.tomcat.* before upgrading -->
-        <!-- Check LogbackValue and TomcatServerAdapter in both modules. -->
-        <logback-access.version>2.0.7</logback-access.version>
         <open.telemetry.version>1.58.0</open.telemetry.version>
 
 
@@ -33,6 +31,7 @@
         <maven-resources-plugin.version>3.4.0</maven-resources-plugin.version>
         <maven-source-plugin.version>3.4.0</maven-source-plugin.version>
         <maven-deploy-plugin.version>3.1.4</maven-deploy-plugin.version>
+        <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -69,6 +68,14 @@
         </resources>
 
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration> <!-- fix for sbom-action not supporting multiple paths -->
+                    <outputDirectory>${maven.multiModuleProjectDirectory}/target/${project.artifactId}</outputDirectory>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>

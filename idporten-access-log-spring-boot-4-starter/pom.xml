@@ -4,6 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>idporten-access-log-spring-boot-4-starter</artifactId>
+    <name>idporten-access-log-spring-boot-4-starter (${spring-boot.version}) + logback-access:${logback-access.version}</name>
 
     <parent>
         <groupId>no.idporten.logging</groupId>
@@ -11,13 +12,18 @@
         <version>DEV-SNAPSHOT</version>
     </parent>
 
+    <!--
+     A note on upgrading: When upgrading spring-boot-starter or-logback-classes, ensure
+     both artifacts have logback dependencies that is compatible.
+
+     Even when upgrading **patch versions** of these components, might break compatibility.
+     -->
     <properties>
         <spring-boot.version>4.0.2</spring-boot.version>
         <logstash-logback-encoder.version>9.0</logstash-logback-encoder.version>
         <logback-access.version>2.0.9</logback-access.version>
-        <logback-core.version>1.5.26</logback-core.version>
-        <logback-classic.version>1.5.26</logback-classic.version>
         <tomcat.version>11.0.15</tomcat.version>
+        <argLine />
     </properties>
 
     <dependencyManagement>
@@ -36,6 +42,11 @@
     <!-- * dependencies               * -->
     <!-- ****************************** -->
     <dependencies>
+        <dependency>
+            <groupId>no.idporten.logging</groupId>
+            <artifactId>idporten-access-log-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
@@ -59,6 +70,11 @@
             <artifactId>spring-boot-starter-webmvc-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
 
         <dependency>
             <groupId>net.logstash.logback</groupId>
@@ -72,18 +88,17 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
-            <version>${logback-core.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>${logback-classic.version}</version>
+            <!-- provided by spring-starter-logging -->
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback.access</groupId>
-            <artifactId>logback-access-common</artifactId>
+            <artifactId>logback-access-tomcat</artifactId>
             <version>${logback-access.version}</version>
         </dependency>
     </dependencies>
@@ -100,6 +115,31 @@
                         <arg>-parameters</arg>
                     </compilerArgs>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
+                <configuration>
+                    <argLine>@{argLine} -XX:+EnableDynamicAgentLoading</argLine>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>integration-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <excludes>
+                                <exclude>none</exclude>
+                            </excludes>
+                            <includes>
+                                <include>**/*IT.java</include>
+                            </includes>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
