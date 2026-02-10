@@ -77,7 +77,7 @@ public class AccessLogsConfiguration {
     @Bean
     @Order(1)
     public SingleStringFieldAccessLogDecorator appNameAccessLogDecorator(AccessLogsProperties properties) {
-        return new SingleStringFieldAccessLogDecorator(no.idporten.logging.access.common.AccessLogFields.APP_NAME,
+        return new SingleStringFieldAccessLogDecorator(AccessLogFields.APP_NAME,
                 StringUtils.hasText(properties.getName()) ? properties.getName() : "");
     }
 
