@@ -1,27 +1,30 @@
 package no.idporten.logging.access;
 
-import org.junit.jupiter.api.AfterEach;
+import org.awaitility.Awaitility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.system.CapturedOutput;
+import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ExtendWith(OutputCaptureExtension.class)
 @ContextConfiguration(classes = {MockApplication.class})
 class AccessLogLogbackIT {
 
@@ -30,8 +33,6 @@ class AccessLogLogbackIT {
 
     private HttpClient httpClient;
 
-    private ByteArrayOutputStream outContent;
-    private PrintStream originalOut;
 
     @DynamicPropertySource
     static void dynamicProperties(DynamicPropertyRegistry registry) {
@@ -47,25 +48,13 @@ class AccessLogLogbackIT {
 
     @BeforeEach
     void setup() {
-
-        // Create HTTP client for making requests
         httpClient = HttpClient.newHttpClient();
-
-        // Capture stdout to verify console output
-        outContent = new ByteArrayOutputStream();
-        originalOut = System.out;
-        System.setOut(new PrintStream(outContent));
-    }
-
-    @AfterEach
-    void teardown() {
-        System.setOut(originalOut);
     }
 
 
     @Test
     @DisplayName("Given a request, expect access log to contain custom environment fields")
-    void shouldIncludeCustomAccessLogProviderFields() throws Exception {
+    void shouldIncludeCustomAccessLogProviderFields(CapturedOutput output) throws Exception {
         // when making an HTTP request
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("http://localhost:" + port + "/test"))
@@ -73,23 +62,20 @@ class AccessLogLogbackIT {
                 .build();
         httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        // give some time for async logging to complete
-        Thread.sleep(500);
-        System.out.flush();
-
-        String output = outContent.toString();
-
         // then the access log should contain custom fields added by AccesslogProvider
-        assertThat(output).contains("\"application\"");
-        assertThat(output).contains("\"environment\"");
-
-        assertThat(output).contains("idporten-access-junit");
-        assertThat(output).contains("unitland");
+        Awaitility.await()
+                .atMost(Duration.ofSeconds(2))
+                .untilAsserted(() -> {
+                    assertThat(output.getOut()).contains("\"application\"");
+                    assertThat(output.getOut()).contains("\"environment\"");
+                    assertThat(output.getOut()).contains("idporten-access-junit");
+                    assertThat(output.getOut()).contains("unitland");
+                });
     }
 
     @Test
     @DisplayName("Given a request to the servlet, expect JSON access log keys and values to be present in console")
-    void shouldWriteAccessLogAsJsonToConsole() throws Exception {
+    void shouldWriteAccessLogAsJsonToConsole(CapturedOutput output) throws Exception {
         // when making an HTTP request to a normal endpoint
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("http://localhost:" + port + "/test"))
@@ -97,24 +83,22 @@ class AccessLogLogbackIT {
                 .build();
         httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        // give some time for async logging to complete
-        Thread.sleep(500);
-        System.out.flush();
-
-        String output = outContent.toString();
-
         // then the access log should contain the expected JSON fields from logback-access-req-full.xml
-        assertThat(output).contains("\"@type\":\"access\"");
-        assertThat(output).contains("\"logtype\":\"tomcat-access\"");
-        assertThat(output).contains("\"request_method\":\"GET\"");
-        assertThat(output).contains("\"request_uri\":\"/test\"");
-        assertThat(output).contains("\"status_code\":200");
-        assertThat(output).contains("\"fullRequest\"");
+        Awaitility.await()
+                .atMost(Duration.ofSeconds(2))
+                .untilAsserted(() -> {
+                    assertThat(output.getOut()).contains("\"@type\":\"access\"");
+                    assertThat(output.getOut()).contains("\"logtype\":\"tomcat-access\"");
+                    assertThat(output.getOut()).contains("\"request_method\":\"GET\"");
+                    assertThat(output.getOut()).contains("\"request_uri\":\"/test\"");
+                    assertThat(output.getOut()).contains("\"status_code\":200");
+                    assertThat(output.getOut()).contains("\"fullRequest\"");
+                });
     }
 
     @Test
     @DisplayName("Given a request to an excluded path, the access log should NOT be written to console")
-    void shouldNotWriteAccessLogForExcludedPath() throws Exception {
+    void shouldNotWriteAccessLogForExcludedPath(CapturedOutput output) throws Exception {
         // when making an HTTP request to an excluded path
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("http://localhost:" + port + "/info"))
@@ -122,23 +106,20 @@ class AccessLogLogbackIT {
                 .build();
         httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        // give some time for async logging to complete (if it were to happen)
-        Thread.sleep(500);
-        System.out.flush();
-
-        String output = outContent.toString();
-
         // then the access log should NOT contain a log entry for the excluded path
-        assertThat(output).doesNotContain("/info");
+        Awaitility.await()
+                .during(Duration.ofMillis(500))
+                .atMost(Duration.ofSeconds(1))
+                .untilAsserted(() -> assertThat(output.getOut()).doesNotContain("/info"));
     }
 
     @DisplayName("Given a request to a excluded paths, then access log should NOT write to console")
-    @CsvSource("""
-            /info,
-            /health
-            """)
+    @CsvSource({
+            "/info",
+            "/health"
+    })
     @ParameterizedTest(name = "Given a request to excluded path {0}")
-    void shouldNotWriteAccessLogForHealthEndpoint(String uri) throws Exception {
+    void shouldNotWriteAccessLogForHealthEndpoint(String uri, CapturedOutput output) throws Exception {
         // when making an HTTP request to /health (typically excluded for health checks)
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("http://localhost:" + port + uri))
@@ -146,13 +127,10 @@ class AccessLogLogbackIT {
                 .build();
         httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        // give some time for async logging to complete (if it were to happen)
-        Thread.sleep(500);
-        System.out.flush();
-
-        String output = outContent.toString();
-
         // then the access log should NOT contain a log entry for the health endpoint
-        assertThat(output).doesNotContain(uri);
+        Awaitility.await()
+                .during(Duration.ofMillis(500))
+                .atMost(Duration.ofSeconds(1))
+                .untilAsserted(() -> assertThat(output.getOut()).doesNotContain(uri));
     }
 }
