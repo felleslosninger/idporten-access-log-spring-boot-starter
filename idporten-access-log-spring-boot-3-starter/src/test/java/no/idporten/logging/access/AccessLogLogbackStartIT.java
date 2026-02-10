@@ -58,7 +58,7 @@ class AccessLogLogbackStartIT {
     }
 
     @Test
-    @DisplayName("Given the Spring context has started, expect logs to not contain logback appender warnings")
+    @DisplayName("Given the Spring context has started, logback should process the console appender")
     void startupShouldContainReferencedAppender() {
         String stdout = outContent.toString();
         String stderr = errContent.toString();
