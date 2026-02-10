@@ -12,5 +12,5 @@ jobs:
     uses: felleslosninger/github-workflows/.github/workflows/ci-maven-build-lib.yml@main
     with:
       java-version: 17
-      sbom-path: ./idporten-access-log-spring-boot-3-starter/target/
+      maven-lifecycle: test verify
     secrets: inherit
