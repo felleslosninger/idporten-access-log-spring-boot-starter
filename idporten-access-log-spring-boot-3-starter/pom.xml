@@ -121,17 +121,22 @@
                 <configuration>
                     <argLine>@{argLine} -XX:+EnableDynamicAgentLoading</argLine>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>${maven-failsafe-plugin.version}</version>
+
                 <executions>
                     <execution>
+                        <id>integration-test</id>
+                        <phase>test</phase>
                         <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
+                            <goal>test</goal>
                         </goals>
+                        <configuration>
+                            <excludes>
+                                <exclude>none</exclude>
+                            </excludes>
+                            <includes>
+                                <include>**/*IT.java</include>
+                            </includes>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
