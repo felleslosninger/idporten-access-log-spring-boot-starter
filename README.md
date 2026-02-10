@@ -5,7 +5,7 @@
 
 
 This project provides Spring Boot starter modules configuring Tomcat access logs in JSON (version 10.0.x and 11.0.x).
-See [idporten-access-log-common/src/main/resources/logback-access.xml](/idporten-access-log-spring-boot-3-starter/src/main/resources/logback-access.xml) for the syntax of logging.
+See [idporten-access-log-common/src/main/resources/logback-access.xml](/idporten-access-log-common/src/main/resources/logback-access.xml) for the syntax of logging.
 
 ## Provided artifacts
 From stable version ``3.0.0`` the following artifacts are provided:
