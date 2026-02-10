@@ -12,5 +12,11 @@ jobs:
     uses: felleslosninger/github-workflows/.github/workflows/ci-maven-build-lib.yml@main
     with:
       java-version: 17
-      maven-lifecycle: test verify
+      maven-lifecycle: test
+    secrets: inherit
+  call-workflow-maven-verify:
+    uses: felleslosninger/github-workflows/.github/workflows/ci-maven-build-lib.yml@main
+    with:
+      java-version: 17
+      maven-lifecycle: verify
     secrets: inherit
