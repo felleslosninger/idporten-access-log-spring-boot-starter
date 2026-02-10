@@ -52,7 +52,7 @@ class StaticResourcesFilterTest {
 
         var result = filter.decide(accessEvent);
 
-        // then the logging decision should be denied
+        // then
         assertEquals(FilterReply.valueOf(expectedReply), result);
     }
 
