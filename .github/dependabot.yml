@@ -1,4 +1,3 @@
-
 # To get started with Dependabot version updates, you'll need to specify which
 # package ecosystems to update and where the package manifests are located.
 # Please see the documentation for all configuration options:
@@ -6,7 +5,37 @@
 
 version: 2
 updates:
-  - package-ecosystem: "maven" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  # Parent POM and common module
+  - package-ecosystem: "maven"
+    directory: "/"
     schedule:
       interval: "daily"
+    ignore:
+      # Ignore Spring Boot updates in root - handled by submodules
+      - dependency-name: "org.springframework.boot:*"
+
+  # Spring Boot 3.x module - pin to v3.x
+  - package-ecosystem: "maven"
+    directory: "/idporten-access-log-spring-boot-3-starter"
+    schedule:
+      interval: "daily"
+    ignore:
+      # Keep Spring Boot on version 3.x - do not upgrade to 4.x
+      - dependency-name: "org.springframework.boot:*"
+        update-types: ["version-update:semver-major"]
+      # Keep Tomcat on version 10.x (compatible with Spring Boot 3.x)
+      - dependency-name: "org.apache.tomcat:*"
+        update-types: ["version-update:semver-major"]
+
+  # Spring Boot 4.x module - pin to v4.x
+  - package-ecosystem: "maven"
+    directory: "/idporten-access-log-spring-boot-4-starter"
+    schedule:
+      interval: "daily"
+    ignore:
+      # Keep Spring Boot on version 4.x - do not downgrade to 3.x
+      - dependency-name: "org.springframework.boot:*"
+        update-types: ["version-update:semver-major"]
+      # Keep Tomcat on version 11.x (compatible with Spring Boot 4.x)
+      - dependency-name: "org.apache.tomcat:*"
+        update-types: ["version-update:semver-major"]
