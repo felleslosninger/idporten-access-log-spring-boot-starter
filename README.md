@@ -20,9 +20,9 @@ To build and run the application you need:
 
 * JDK 17
 * Maven
-* Spring Boot 3.4.x/3.5.x
-  * logback 1.5.20
-  * logback-access 2.0.7
+* Spring Boot 3.5.10
+  * logback 1.5.25
+  * logback-access 2.0.9
 * Spring Boot 4.0.2
   * logback 1.5.25
   * logback-access 2.0.9
