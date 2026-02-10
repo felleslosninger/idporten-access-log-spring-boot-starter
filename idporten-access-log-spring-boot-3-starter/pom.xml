@@ -23,7 +23,7 @@
     <properties>
         <spring-boot.version>3.5.10</spring-boot.version>
         <logstash-logback-encoder.version>8.1</logstash-logback-encoder.version>
-        <logback-access.version>2.0.7</logback-access.version>
+        <logback-access.version>2.0.9</logback-access.version>
         <tomcat.version>10.1.40</tomcat.version>
         <argLine />
     </properties>
