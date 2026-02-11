@@ -1,6 +1,7 @@
 package no.idporten.logging.access;
 
 import ch.qos.logback.access.tomcat.LogbackValve;
+import no.idporten.logging.access.common.AccessLogConstants;
 import no.idporten.logging.access.common.AccessLogFields;
 import no.idporten.logging.access.decorator.AccessLogDecorators;
 import no.idporten.logging.access.decorator.SingleStringFieldAccessLogDecorator;
@@ -20,14 +21,12 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
+import static no.idporten.logging.access.common.AccessLogConstants.*;
+
 
 @Configuration
 @EnableConfigurationProperties(AccessLogsProperties.class)
 public class AccessLogsConfiguration {
-
-    protected static final String DEFAULT_LOGBACK_CONFIG_FILE = "logback-access.xml";
-    protected static final String LOGBACK_CONFIG_REQ_FULL_FILE = "logback-access-req-full.xml";
-    protected static final String LOGBACK_CONFIG_REQ_RESP_FULL_FILE = "logback-access-req-resp-full.xml";
 
     Logger log = LoggerFactory.getLogger(AccessLogsConfiguration.class);
 
@@ -60,6 +59,7 @@ public class AccessLogsConfiguration {
         return factory -> {
             var logbackValve = new LogbackValve();
             logbackValve.setFilename(logbackConfigFile);
+            logbackValve.setName(AccessLogConstants.LOGBACK_VALVE_NAME);
             logbackValve.setAsyncSupported(true);
 
             var staticResourcesFilter = new StaticResourcesFilter(filterPaths, filterStaticResources);
