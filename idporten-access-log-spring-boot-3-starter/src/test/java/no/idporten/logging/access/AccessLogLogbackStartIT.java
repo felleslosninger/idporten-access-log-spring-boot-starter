@@ -11,6 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 
+import static no.idporten.logging.access.common.AccessLogConstants.LOGBACK_VALVE_NAME;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -36,6 +37,8 @@ class AccessLogLogbackStartIT {
 
         assertThat(combinedOutput).isNotBlank();
         assertThat(combinedOutput).contains("Processing appender named [" + ACCESS_JSON_APPENDER_NAME + "]");
+        assertThat(combinedOutput).contains("Attaching appender named [" + ACCESS_JSON_APPENDER_NAME + "] to ch.qos.logback.access.tomcat.LogbackValve[" + LOGBACK_VALVE_NAME + "]");
+        assertThat(combinedOutput).contains("LogbackValve[" + LOGBACK_VALVE_NAME + "] - Done configuring");
     }
 
     @Test
