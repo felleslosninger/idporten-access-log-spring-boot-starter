@@ -1,20 +1,26 @@
-# This workflow will build a Java project with Maven
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
-
 name: Release to github packages
 
 on:
   release:
     types: [created]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  repository-projects: read
+  packages: write
+
 jobs:
-  call-workflow-maven-deploy:
-    uses: felleslosninger/github-workflows/.github/workflows/ci-maven-deploy.yml@main
-    permissions:
-      contents: write
-      packages: write
+  call-workflow-ci-build-publish-lib:
+    uses: felleslosninger/github-workflows/.github/workflows/ci-build-publish-lib.yml@main
     with:
       java-version: 17
       package-version: ${{ github.event.release.tag_name }}
       deployment-repository: ${{ github.repository }}
+      sbom-path: ./
     secrets: inherit
