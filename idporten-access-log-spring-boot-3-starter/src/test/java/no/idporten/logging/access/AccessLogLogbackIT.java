@@ -89,6 +89,7 @@ class AccessLogLogbackIT {
                 .untilAsserted(() -> {
                     assertThat(output.getOut()).contains("\"@type\":\"access\"");
                     assertThat(output.getOut()).contains("\"logtype\":\"tomcat-access\"");
+                    assertThat(output.getOut()).contains("\"level\":\"INFO\"");
                     assertThat(output.getOut()).contains("\"request_method\":\"GET\"");
                     assertThat(output.getOut()).contains("\"request_uri\":\"/test\"");
                     assertThat(output.getOut()).contains("\"status_code\":200");
