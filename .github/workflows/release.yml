@@ -22,5 +22,4 @@ jobs:
       java-version: 17
       package-version: ${{ github.event.release.tag_name }}
       deployment-repository: ${{ github.repository }}
-      sbom-path: ./
     secrets: inherit
