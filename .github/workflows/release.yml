@@ -1,0 +1,21 @@
+name: Release to github packages
+
+on:
+  release:
+    types: [created]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-publish-lib:
+    uses: felleslosninger/github-workflows/.github/workflows/ci-build-publish-lib.yml@main
+    permissions:
+      contents: read
+      packages: write
+    with:
+      java-version: 17
+      package-version: ${{ github.event.release.tag_name }}
+      deployment-repository: ${{ github.repository }}
+    secrets: inherit

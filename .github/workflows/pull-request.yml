@@ -1,0 +1,21 @@
+name: Pull request
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - edited
+    branches:
+      - main
+
+jobs:
+  pull-request-checks:
+    permissions:
+      contents: read
+      packages: read
+    uses: felleslosninger/github-workflows/.github/workflows/ci-maven-build-lib.yml@main
+    with:
+      java-version: 17
+    secrets: inherit
