@@ -10,12 +10,11 @@ on:
     branches:
       - main
 
-permissions:
-  contents: read
-  packages: read
-
 jobs:
   pull-request-checks:
+    permissions:
+      contents: read
+      packages: read
     uses: felleslosninger/github-workflows/.github/workflows/ci-maven-build-lib.yml@main
     with:
       java-version: 17
