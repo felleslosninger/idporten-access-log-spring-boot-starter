@@ -13,9 +13,9 @@ on:
 jobs:
   pull-request-checks:
     permissions:
-      contents: read
-      packages: read
-    uses: felleslosninger/github-workflows/.github/workflows/ci-maven-build-lib.yml@main
+      contents: write
+      pull-requests: write
+    uses: felleslosninger/github-workflows/.github/workflows/ci-pr-checks-lib.yml@main
     with:
       java-version: 17
     secrets: inherit
