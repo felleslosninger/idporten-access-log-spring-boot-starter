@@ -12,7 +12,6 @@ on:
 
 jobs:
   pull-request-checks:
-    # write permissions are required by the auto-merge job in the called workflow, even though auto-merge is not enabled
     permissions:
       contents: write
       pull-requests: write
