@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>idporten-access-log-spring-boot-4-starter</artifactId>
-    <name>idporten-access-log-spring-boot-4-starter (${spring-boot.version}) + logback-access:${logback-access.version}</name>
+    <name>idporten-access-log-spring-boot-4-starter (${spring-boot.version}) + logback:${logback.version} + logback-access:${logback-access.version}</name>
 
     <parent>
         <groupId>no.idporten.logging</groupId>
@@ -17,18 +17,26 @@
      both artifacts have logback dependencies that is compatible.
 
      Even when upgrading **patch versions** of these components, might break compatibility.
+
+     WARNING: logback.version and logback-access.version must move TOGETHER. logback-access pins an
+     exact logback-core version and logs a startup WARN ("For logback-core, expected version X but found Y")
+     on any mismatch - this is NOT a build failure, so it is easy to miss. Scrutinise Dependabot PRs that
+     bump only one of them. Keep tomcat.version on the Tomcat major the access artifact targets.
+     See AGENTS.md ("Logback upgrade - pitfalls") and let LogbackVersionCompatibilityTest be the gate.
      -->
     <properties>
-        <spring-boot.version>4.1.0</spring-boot.version>
+        <spring-boot.version>4.1.1</spring-boot.version>
         <jackson-bom.version>3.1.7</jackson-bom.version>
         <logstash-logback-encoder.version>9.0</logstash-logback-encoder.version>
         <logback-access.version>2.0.15</logback-access.version>
-        <tomcat.version>10.1.60</tomcat.version>
+        <logback.version>1.6.3</logback.version>
+        <tomcat.version>11.0.26</tomcat.version>
         <argLine />
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <!-- BOM imports (jackson-bom first so it overrides the Spring Boot BOM's Jackson version) -->
             <dependency>
                 <groupId>tools.jackson</groupId>
                 <artifactId>jackson-bom</artifactId>
@@ -43,6 +51,40 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <!-- Logback family, pinned to stay compatible with logback-access (see startup version check):
+                 - logback-core/classic ARE managed by the Spring Boot BOM; we pin to OVERRIDE the BOM so the
+                   version exactly matches the logback-core that logback-access expects (avoids the startup
+                   "For logback-core, expected version X but found Y" warning).
+                 - logback-access-tomcat is NOT managed by the Spring Boot BOM, so it must be pinned here. -->
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback.access</groupId>
+                <artifactId>logback-access-tomcat</artifactId>
+                <version>${logback-access.version}</version>
+            </dependency>
+
+            <!-- Other third-party versions. Also NOT managed by the Spring Boot BOM (it manages
+                 tomcat-embed-*, not tomcat-catalina), so the version must be pinned here. -->
+            <dependency>
+                <groupId>net.logstash.logback</groupId>
+                <artifactId>logstash-logback-encoder</artifactId>
+                <version>${logstash-logback-encoder.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.tomcat</groupId>
+                <artifactId>tomcat-catalina</artifactId>
+                <version>${tomcat.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -50,11 +92,6 @@
     <!-- * dependencies               * -->
     <!-- ****************************** -->
     <dependencies>
-        <dependency>
-            <groupId>no.idporten.logging</groupId>
-            <artifactId>idporten-access-log-common</artifactId>
-            <version>${project.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
@@ -69,7 +106,6 @@
         <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-catalina</artifactId>
-            <version>${tomcat.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -85,13 +121,12 @@
         </dependency>
 
         <dependency>
-            <groupId>net.logstash.logback</groupId>
-            <artifactId>logstash-logback-encoder</artifactId>
-            <version>${logstash-logback-encoder.version}</version>
-        </dependency>
-        <dependency>
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -107,11 +142,55 @@
         <dependency>
             <groupId>ch.qos.logback.access</groupId>
             <artifactId>logback-access-tomcat</artifactId>
-            <version>${logback-access.version}</version>
         </dependency>
     </dependencies>
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>${build-helper-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>add-shared-main-sources</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${shared.sources.basedir}/src/main/java</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>add-shared-test-sources</id>
+                        <phase>generate-test-sources</phase>
+                        <goals>
+                            <goal>add-test-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${shared.sources.basedir}/src/test/java</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>add-shared-resources</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>add-resource</goal>
+                        </goals>
+                        <configuration>
+                            <resources>
+                                <resource>
+                                    <directory>${shared.sources.basedir}/src/main/resources</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
