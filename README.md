@@ -16,18 +16,17 @@ From stable version ``3.0.0`` the following artifacts are provided:
 | `no.idporten.logging.idporten-access-log-spring-boot-4-starter` | Spring Boot 4.0.x/4.1.x |
 ## Requirements
 
-To build and run the application you need:
+To build and run the application you need **Maven** and the Java version below.
 
-* JDK 17
-* Maven
-* Spring Boot 3.5.16 (`idporten-access-log-spring-boot-3-starter`)
-  * logback 1.5.38
-  * logback-access 2.0.13
-  * tomcat 10.1.60
-* Spring Boot 4.1.1 (`idporten-access-log-spring-boot-4-starter`)
-  * logback 1.6.3
-  * logback-access 2.0.15
-  * tomcat 11.0.26
+![Java](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fraw.githubusercontent.com%2Ffelleslosninger%2Fidporten-access-log-spring-boot-starter%2Fmain%2Fpom.xml&query=%2F%2F%2A%5Blocal-name%28%29%3D%27java.version%27%5D&label=Java&color=orange)
+
+Dependency versions are read live from each starter's `pom.xml` (via shields.io, from the `main` branch):
+
+**Spring Boot 3 starter**  
+![Spring Boot](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fraw.githubusercontent.com%2Ffelleslosninger%2Fidporten-access-log-spring-boot-starter%2Fmain%2Fidporten-access-log-spring-boot-3-starter%2Fpom.xml&query=%2F%2F%2A%5Blocal-name%28%29%3D%27spring-boot.version%27%5D&label=Spring+Boot&color=blue) ![logback](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fraw.githubusercontent.com%2Ffelleslosninger%2Fidporten-access-log-spring-boot-starter%2Fmain%2Fidporten-access-log-spring-boot-3-starter%2Fpom.xml&query=%2F%2F%2A%5Blocal-name%28%29%3D%27logback.version%27%5D&label=logback&color=blue) ![logback-access](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fraw.githubusercontent.com%2Ffelleslosninger%2Fidporten-access-log-spring-boot-starter%2Fmain%2Fidporten-access-log-spring-boot-3-starter%2Fpom.xml&query=%2F%2F%2A%5Blocal-name%28%29%3D%27logback-access.version%27%5D&label=logback-access&color=blue) ![tomcat](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fraw.githubusercontent.com%2Ffelleslosninger%2Fidporten-access-log-spring-boot-starter%2Fmain%2Fidporten-access-log-spring-boot-3-starter%2Fpom.xml&query=%2F%2F%2A%5Blocal-name%28%29%3D%27tomcat.version%27%5D&label=tomcat&color=blue)
+
+**Spring Boot 4 starter**  
+![Spring Boot](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fraw.githubusercontent.com%2Ffelleslosninger%2Fidporten-access-log-spring-boot-starter%2Fmain%2Fidporten-access-log-spring-boot-4-starter%2Fpom.xml&query=%2F%2F%2A%5Blocal-name%28%29%3D%27spring-boot.version%27%5D&label=Spring+Boot&color=blue) ![logback](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fraw.githubusercontent.com%2Ffelleslosninger%2Fidporten-access-log-spring-boot-starter%2Fmain%2Fidporten-access-log-spring-boot-4-starter%2Fpom.xml&query=%2F%2F%2A%5Blocal-name%28%29%3D%27logback.version%27%5D&label=logback&color=blue) ![logback-access](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fraw.githubusercontent.com%2Ffelleslosninger%2Fidporten-access-log-spring-boot-starter%2Fmain%2Fidporten-access-log-spring-boot-4-starter%2Fpom.xml&query=%2F%2F%2A%5Blocal-name%28%29%3D%27logback-access.version%27%5D&label=logback-access&color=blue) ![tomcat](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fraw.githubusercontent.com%2Ffelleslosninger%2Fidporten-access-log-spring-boot-starter%2Fmain%2Fidporten-access-log-spring-boot-4-starter%2Fpom.xml&query=%2F%2F%2A%5Blocal-name%28%29%3D%27tomcat.version%27%5D&label=tomcat&color=blue)
 
 ## Compatibility and upgrading
 Each starter pins a `logback-core`/`logback-classic` version that matches its bundled `logback-access`
