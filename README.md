@@ -27,6 +27,19 @@ To build and run the application you need:
   * logback 1.5.25
   * logback-access 2.0.9
 
+## Compatibility and upgrading
+Each starter pins a `logback-core`/`logback-classic` version that matches its bundled `logback-access`
+(logback-access performs a version check at startup and logs a warning such as
+`For logback-core, expected version X but found Y` on a mismatch).
+
+To upgrade safely:
+* Prefer bumping the starter version — it brings a known-compatible Logback + logback-access set.
+* If you override Logback yourself, keep `logback-core` and `logback-classic` on the version expected by your
+  `logback-access` version, and verify startup logs are free of the version-mismatch warning above.
+
+A safety-net test (`LogbackVersionCompatibilityTest`) runs in both starters and fails the build if that
+warning appears, so mismatches are caught before release.
+
 ## Build library
 
 Build with Maven:
