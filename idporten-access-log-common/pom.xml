@@ -12,6 +12,58 @@
         <version>DEV-SNAPSHOT</version>
     </parent>
 
+    <!-- Compile against the Spring Boot 3 baseline; the starters supply runtime dependencies. -->
+    <properties>
+        <spring-boot.version>3.5.16</spring-boot.version>
+        <logback-access.version>2.0.13</logback-access.version>
+        <logback.version>1.5.38</logback.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback.access</groupId>
+            <artifactId>logback-access-common</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>

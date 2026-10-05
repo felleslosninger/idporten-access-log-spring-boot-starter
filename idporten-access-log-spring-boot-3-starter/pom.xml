@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>idporten-access-log-spring-boot-3-starter</artifactId>
-    <name>idporten-access-log-spring-boot-3-starter (${spring-boot.version}) + logback-access:${logback-access.version}</name>
+    <name>idporten-access-log-spring-boot-3-starter (${spring-boot.version}) + logback:${logback.version} + logback-access:${logback-access.version}</name>
 
 
     <parent>
@@ -24,13 +24,24 @@
         <spring-boot.version>3.5.16</spring-boot.version>
         <jackson-bom.version>2.21.7</jackson-bom.version>
         <logstash-logback-encoder.version>8.1</logstash-logback-encoder.version>
-        <logback-access.version>2.0.15</logback-access.version>
+        <logback-access.version>2.0.13</logback-access.version>
+        <logback.version>1.5.38</logback.version>
         <tomcat.version>10.1.60</tomcat.version>
         <argLine />
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson</groupId>
                 <artifactId>jackson-bom</artifactId>
@@ -110,6 +121,25 @@
     </dependencies>
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>${build-helper-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>add-shared-test-sources</id>
+                        <phase>generate-test-sources</phase>
+                        <goals>
+                            <goal>add-test-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.basedir}/../idporten-access-log-shared-test/src/test/java</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
