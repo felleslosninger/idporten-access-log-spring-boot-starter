@@ -3,16 +3,32 @@
 Conventions for working in this repository. Follow them when making changes.
 
 ## Module layout
-- `idporten-access-log-common` — shared production classes/resources compiled against the
-  Spring Boot 3 baseline using `provided` dependencies. No runtime dependencies are forced on consumers.
-- `idporten-access-log-spring-boot-3-starter` / `-4-starter` — thin starters that bring their own
-  Spring Boot, Tomcat, Jackson, Logback and logback-access versions.
-- `idporten-access-log-shared-test` — a source-only directory (no `pom.xml`, not a module).
-  Both starters add it as a test-source root via `build-helper-maven-plugin` so one set of shared
-  tests compiles and runs against each starter's own dependency set.
-  *Why:* the shared tests must execute against **both** runtime dependency sets (Boot 3 and Boot 4) to
-  actually catch version-specific breakage; a plain test-jar would compile once and lose that coverage,
-  and copying the tests would let the two copies drift.
+- `idporten-access-log-spring-boot-3-starter` / `-4-starter` — the only real Maven modules and the only
+  published artifacts. Each is a thin starter that brings its own Spring Boot, Tomcat, Jackson, Logback and
+  logback-access versions, and is **self-contained** (the shared code/resources below are compiled/copied
+  into each starter jar).
+- `idporten-access-log-common` — a **source-only holder** (no `pom.xml`, NOT a module, never published).
+  It holds everything shared by both starters: `src/main/java` (framework-free constants/fields plus the
+  framework-coupled-but-identical `AccessLogsProperties` and `StaticResourcesFilter`), `src/main/resources`
+  (the `logback-access*.xml`), and `src/test/java` (the shared tests). Both starters pull it in via
+  `build-helper-maven-plugin` using the parent property `${shared.sources.basedir}`:
+  `add-source` (main java), `add-resource` (resources) and `add-test-source` (tests).
+  *Why source-only instead of a published/compiled module:* the shared classes must compile against **each**
+  starter's own Spring Boot / Tomcat / Jackson / logback versions, which a single compiled module cannot do;
+  and since consumers only use the starters, there is no value in publishing a separate shared artifact.
+  Keeping it as compiled-per-starter source gives both DRY and self-contained starter jars with the fewest
+  possible modules (just the two starters).
+  *Why the three build-helper executions can't be merged:* `add-source` and `add-test-source` both read the
+  `<sources>` parameter but need different directories (main vs test), so they must stay separate; the shared
+  base path is factored into `${shared.sources.basedir}` (parent POM) so it is written once.
+  *Why shared tests live here:* they must execute against **both** runtime dependency sets (Boot 3 and 4) to
+  catch version-specific breakage; a plain test-jar would compile once and lose that coverage, and copying
+  the tests would let the two copies drift.
+  *When to split a shared class out (per starter):* only when its API genuinely diverges between the two
+  platform lines (e.g. the Jackson 2 vs 3 `AccesslogProvider`/decorators, which are intentionally kept
+  per-starter). Because the shared sources are compiled against both dependency sets, such divergence shows
+  up as a compile failure in one starter — that is the signal to move that one class into each starter's own
+  `src/main/java`. See the class comment in `StaticResourcesFilter` for the exact procedure.
 
 ## Dependency & version pinning (both starters must stay uniform)
 *Why uniform:* the two starters differ only by major platform version, so keeping identical structure makes
@@ -29,8 +45,7 @@ diffs reviewable and prevents a fix landing in one starter but not the other.
   *Why jackson-bom is imported before spring-boot-dependencies:* for imported BOMs the **first** declaration
   wins, so jackson-bom must come first to override the Jackson version managed by the Spring Boot BOM.
   (Flipping this silently downgraded Boot 4 Jackson 3.1.7 → 3.1.5 — caught by Trivy, not the build.)
-- In `<dependencies>` declare only `groupId`/`artifactId`/`scope` — never an inline `<version>`
-  (the reactor module `idporten-access-log-common` uses `${project.version}` and is the only exception).
+- In `<dependencies>` declare only `groupId`/`artifactId`/`scope` — never an inline `<version>`.
   *Why:* a single source of truth for versions (the management block) avoids a dependency being pinned in
   two places that drift apart.
 - Keep the two starter POMs structurally identical: same property order, same dependency order,
@@ -72,7 +87,8 @@ diffs reviewable and prevents a fix landing in one starter but not the other.
   resolve to the intended, mutually-compatible versions. A green build of that safety-net is the gate.
 
 ## Tests
-- Put tests that are identical across both starters in `idporten-access-log-shared-test`; never duplicate them.
+- Put tests that are identical across both starters in `idporten-access-log-common/src/test/java`;
+  never duplicate them.
   *Why:* duplicated tests drift — a fix or new case added to one starter silently misses the other.
 - Tests that touch Jackson API differences (`writeStringField` vs `writeStringProperty`,
   `com.fasterxml.jackson` vs `tools.jackson`) stay per-starter.

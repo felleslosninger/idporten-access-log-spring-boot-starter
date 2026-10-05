@@ -1,6 +1,6 @@
 # idporten-access-log-spring-boot-starter
 
-[![Maven build status](https://github.com/felleslosninger/idporten-access-log-spring-boot-starter/actions/workflows/call-maventests.yml/badge.svg)](https://github.com/felleslosninger/idporten-access-log-spring-boot-starter/actions/workflows/call-maventests.yml)
+[![Maven build status](https://github.com/felleslosninger/idporten-access-log-spring-boot-starter/actions/workflows/pull-request.yml/badge.svg)](https://github.com/felleslosninger/idporten-access-log-spring-boot-starter/actions/workflows/pull-request.yml)
 [![Latest Stable Version](https://img.shields.io/github/v/release/felleslosninger/idporten-access-log-spring-boot-starter?display_name=tag)](https://github.com/felleslosninger/idporten-access-log-spring-boot-starter/releases)
 
 
@@ -13,19 +13,21 @@ From stable version ``3.0.0`` the following artifacts are provided:
 | Package Coordinates                                             | Description             |
 |-----------------------------------------------------------------|-------------------------|
 | `no.idporten.logging.idporten-access-log-spring-boot-3-starter` | Spring Boot 3.4.x/3.5.x |
-| `no.idporten.logging.idporten-access-log-spring-boot-4-starter` | Spring Boot 4.0.x       |
+| `no.idporten.logging.idporten-access-log-spring-boot-4-starter` | Spring Boot 4.0.x/4.1.x |
 ## Requirements
 
 To build and run the application you need:
 
 * JDK 17
 * Maven
-* Spring Boot 3.5.10
-  * logback 1.5.25
-  * logback-access 2.0.9
-* Spring Boot 4.0.2
-  * logback 1.5.25
-  * logback-access 2.0.9
+* Spring Boot 3.5.16 (`idporten-access-log-spring-boot-3-starter`)
+  * logback 1.5.38
+  * logback-access 2.0.13
+  * tomcat 10.1.60
+* Spring Boot 4.1.1 (`idporten-access-log-spring-boot-4-starter`)
+  * logback 1.6.3
+  * logback-access 2.0.15
+  * tomcat 11.0.26
 
 ## Compatibility and upgrading
 Each starter pins a `logback-core`/`logback-classic` version that matches its bundled `logback-access`
