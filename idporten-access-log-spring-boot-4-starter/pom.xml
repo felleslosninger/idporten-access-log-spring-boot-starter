@@ -52,7 +52,11 @@
                 <scope>import</scope>
             </dependency>
 
-            <!-- Logback pinned to stay compatible with logback-access (see startup version check) -->
+            <!-- Logback family, pinned to stay compatible with logback-access (see startup version check):
+                 - logback-core/classic ARE managed by the Spring Boot BOM; we pin to OVERRIDE the BOM so the
+                   version exactly matches the logback-core that logback-access expects (avoids the startup
+                   "For logback-core, expected version X but found Y" warning).
+                 - logback-access-tomcat is NOT managed by the Spring Boot BOM, so it must be pinned here. -->
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-core</artifactId>
@@ -69,7 +73,8 @@
                 <version>${logback-access.version}</version>
             </dependency>
 
-            <!-- Other third-party versions -->
+            <!-- Other third-party versions. Also NOT managed by the Spring Boot BOM (it manages
+                 tomcat-embed-*, not tomcat-catalina), so the version must be pinned here. -->
             <dependency>
                 <groupId>net.logstash.logback</groupId>
                 <artifactId>logstash-logback-encoder</artifactId>
