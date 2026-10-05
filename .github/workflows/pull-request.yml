@@ -1,0 +1,21 @@
+name: Pull request
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - edited
+    branches:
+      - main
+
+jobs:
+  pull-request-checks:
+    permissions:
+      contents: write
+      pull-requests: write
+    uses: felleslosninger/github-workflows/.github/workflows/ci-pr-checks-lib.yml@main
+    with:
+      java-version: 17
+    secrets: inherit

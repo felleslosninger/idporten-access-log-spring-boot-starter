@@ -12,7 +12,7 @@
                         "@version" : "1",
                         "@type" : "access",
                         "logtype": "tomcat-access",
-                        "x_forwarded_for": "%header{X-Forwarded-For}",
+                        "level": "INFO",
                         "client_host" : "%clientHost",
                         "remote_user" : "%user",
                         "request_method" : "%requestMethod",
