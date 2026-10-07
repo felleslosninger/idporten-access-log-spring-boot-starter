@@ -30,16 +30,19 @@ Dependency versions are read live from each starter's `pom.xml` (via shields.io,
 
 ## Compatibility and upgrading
 Each starter pins a `logback-core`/`logback-classic` version that matches its bundled `logback-access`
-(logback-access performs a version check at startup and logs a warning such as
-`For logback-core, expected version X but found Y` on a mismatch).
+(logback-access performs a version check at startup and logs a warning on a mismatch; depending on the
+`logback-core` version on the classpath it reads `For logback-core, expected version X but found Y` or
+`Depender [logback-access-common] was expecting version X for dependency [logback-core] but found version Y`).
 
 To upgrade safely:
 * Prefer bumping the starter version — it brings a known-compatible Logback + logback-access set.
 * If you override Logback yourself, keep `logback-core` and `logback-classic` on the version expected by your
   `logback-access` version, and verify startup logs are free of the version-mismatch warning above.
 
-A safety-net test (`LogbackVersionCompatibilityTest`) runs in both starters and fails the build if that
-warning appears, so mismatches are caught before release.
+A safety-net test (`LogbackVersionCompatibilityTest`) runs in both starters and fails the build on a mismatch,
+so mismatches are caught before release. It compares the `logback-core` version expected by `logback-access` with
+the one actually on the classpath (independent of the warning's wording) and also fails on any version-related
+warning the valve records at startup.
 
 ## Build library
 

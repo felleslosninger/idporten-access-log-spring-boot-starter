@@ -53,14 +53,21 @@ diffs reviewable and prevents a fix landing in one starter but not the other.
   may differ.
 
 ## Logback compatibility
-- logback-access runs a startup version check and logs `For logback-core, expected version X but found Y`
-  on a mismatch. Pin `logback-core`/`logback-classic` (`${logback.version}`) to the version expected by the
-  starter's `logback-access` version. The expected version lives in the access jar at
-  `ch/qos/logback/access/common/logback-access-common-dependencies.properties`.
+- logback-access runs a startup version check and logs a `WARN` on a mismatch. The wording comes from
+  **logback-core** (i.e. from whichever core version is actually on the classpath) and has already changed once:
+  core 1.5.x logs `For logback-core, expected version X but found Y`; core 1.6.x logs
+  `Depender [logback-access-common] was expecting version X for dependency [logback-core] but found version Y`
+  followed by `See also https://logback.qos.ch/codes.html#versionMismatch`. Pin `logback-core`/`logback-classic`
+  (`${logback.version}`) to the version expected by the starter's `logback-access` version. The expected version
+  lives in the access jar at `ch/qos/logback/access/common/logback-access-common-dependencies.properties`.
 - `logback-core`/`logback-classic` are `provided`: the pin protects this project's build/tests only and is
   not transitive to consumers. Consumers' own Spring Boot BOM controls their Logback version.
-- A shared safety-net test fails the build if the mismatch warning appears. Keep it free of hard-coded
-  version numbers — assert on the warning *pattern* only, so it keeps working across future version bumps.
+- A shared safety-net test (`LogbackVersionCompatibilityTest`) fails the build on a mismatch. It does **not**
+  match the warning text (that wording is owned by logback-core and changes between versions, so a text match goes
+  blind exactly when the mismatching core brings new wording). Instead it reads the expected logback-core version
+  from the access jar and the actual one from the core jar and asserts equality, plus fails on any version-related
+  `WARN`/`ERROR` status the valve records at startup. Keep it free of hard-coded version numbers so it keeps
+  working across future version bumps.
 - Reflect the compatible versions in each starter's Maven `<name>` and in the README compatibility section.
 
 ### Logback upgrade — pitfalls (read before bumping any Logback artifact)
