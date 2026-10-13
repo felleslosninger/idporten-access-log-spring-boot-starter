@@ -30,7 +30,7 @@
         <logstash-logback-encoder.version>9.0</logstash-logback-encoder.version>
         <logback-access.version>2.0.15</logback-access.version>
         <logback.version>1.6.3</logback.version>
-        <tomcat.version>11.0.26</tomcat.version>
+        <tomcat.version>10.1.61</tomcat.version>
         <argLine />
     </properties>
 
