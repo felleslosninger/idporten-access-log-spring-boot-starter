@@ -26,7 +26,7 @@
              and compiled per starter via build-helper. ${project.basedir} resolves per starter. -->
         <shared.sources.basedir>${project.basedir}/../idporten-access-log-common</shared.sources.basedir>
 
-        <open.telemetry.version>1.66.0</open.telemetry.version>
+        <open.telemetry.version>1.67.0</open.telemetry.version>
 
 
         <!-- maven plugins -->
