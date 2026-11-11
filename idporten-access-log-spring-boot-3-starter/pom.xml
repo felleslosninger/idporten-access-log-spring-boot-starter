@@ -24,6 +24,10 @@
      on any mismatch - this is NOT a build failure, so it is easy to miss. Scrutinise Dependabot PRs that
      bump only one of them. Keep tomcat.version on the Tomcat major the access artifact targets.
      See AGENTS.md ("Logback upgrade - pitfalls") and let LogbackVersionCompatibilityTest be the gate.
+
+     NOTE: unlike the Boot 4 starter, logback.version is pinned here because no logback-access release expects
+     the logback-core version managed by Spring Boot 3.5.x (1.5.34). The pin only applies to this build;
+     consumers must set the same logback.version themselves (see README "Compatibility and upgrading").
      -->
 
     <properties>
