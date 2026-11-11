@@ -28,7 +28,7 @@
      -->
     <properties>
         <spring-boot.version>4.1.1</spring-boot.version>
-        <jackson-bom.version>3.2.4</jackson-bom.version>
+        <jackson-bom.version>3.3.0</jackson-bom.version>
         <logstash-logback-encoder.version>9.0</logstash-logback-encoder.version>
         <!-- 2.0.13 expects logback-core 1.5.38, the version managed by Spring Boot 4.1.x -->
         <logback-access.version>2.0.13</logback-access.version>
