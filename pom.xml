@@ -26,7 +26,7 @@
              and compiled per starter via build-helper. ${project.basedir} resolves per starter. -->
         <shared.sources.basedir>${project.basedir}/../idporten-access-log-common</shared.sources.basedir>
 
-        <open.telemetry.version>1.67.0</open.telemetry.version>
+        <open.telemetry.version>1.68.0</open.telemetry.version>
 
 
         <!-- maven plugins -->
@@ -34,7 +34,7 @@
         <maven-resources-plugin.version>3.5.0</maven-resources-plugin.version>
         <maven-source-plugin.version>3.4.0</maven-source-plugin.version>
         <maven-deploy-plugin.version>3.2.0</maven-deploy-plugin.version>
-        <maven-surefire-plugin.version>3.6.0</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>3.6.1</maven-surefire-plugin.version>
         <build-helper-maven-plugin.version>3.6.2</build-helper-maven-plugin.version>
     </properties>
 

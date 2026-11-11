@@ -37,7 +37,8 @@ diffs reviewable and prevents a fix landing in one starter but not the other.
   *Why:* one obvious place to see/change a version, and it lets the Maven `<name>` surface them.
 - Pin every third-party version in `<dependencyManagement>`, grouped in this order:
   1. BOM imports (`jackson-bom`, then `spring-boot-dependencies`)
-  2. Logback family (`logback-core`, `logback-classic`, `logback-access-tomcat`)
+  2. Logback family (`logback-access-tomcat`; `logback-core`/`logback-classic` only in the Boot 3 starter, see
+     "Logback compatibility")
   3. Other third-party (`logstash-logback-encoder`, `tomcat-catalina`)
   *Why dependencyManagement (not inline):* a managed version overrides versions pulled in **transitively**
   (e.g. logback-core dragged in by logback-access and Spring Boot), which an inline version on a direct
@@ -49,19 +50,26 @@ diffs reviewable and prevents a fix landing in one starter but not the other.
   *Why:* a single source of truth for versions (the management block) avoids a dependency being pinned in
   two places that drift apart.
 - Keep the two starter POMs structurally identical: same property order, same dependency order,
-  same scopes. Only values (versions) and the Jackson groupId (`com.fasterxml.jackson` vs `tools.jackson`)
-  may differ.
+  same scopes. Only values (versions), the Jackson groupId (`com.fasterxml.jackson` vs `tools.jackson`) and the
+  Boot 3-only logback-core/classic pin (see "Logback compatibility") may differ.
 
 ## Logback compatibility
 - logback-access runs a startup version check and logs a `WARN` on a mismatch. The wording comes from
   **logback-core** (i.e. from whichever core version is actually on the classpath) and has already changed once:
   core 1.5.x logs `For logback-core, expected version X but found Y`; core 1.6.x logs
   `Depender [logback-access-common] was expecting version X for dependency [logback-core] but found version Y`
-  followed by `See also https://logback.qos.ch/codes.html#versionMismatch`. Pin `logback-core`/`logback-classic`
-  (`${logback.version}`) to the version expected by the starter's `logback-access` version. The expected version
-  lives in the access jar at `ch/qos/logback/access/common/logback-access-common-dependencies.properties`.
-- `logback-core`/`logback-classic` are `provided`: the pin protects this project's build/tests only and is
-  not transitive to consumers. Consumers' own Spring Boot BOM controls their Logback version.
+  followed by `See also https://logback.qos.ch/codes.html#versionMismatch`. The expected version lives in the
+  access jar at `ch/qos/logback/access/common/logback-access-common-dependencies.properties`.
+- Consumers' own Spring Boot BOM controls their Logback version. A pin in our `dependencyManagement` is **not**
+  inherited by consumers, and an imported BOM can't override what `spring-boot-starter-parent` manages, so a pin
+  only makes our build/tests run with a version consumers don't get.
+  *Therefore:* pick the `logback-access` release whose expected core version equals the Spring Boot BOM's
+  `logback.version`, and leave `logback-core`/`logback-classic` unpinned (Boot 4 starter). Then the safety-net test
+  runs with exactly what consumers get.
+  *Exception (Boot 3 starter):* no `logback-access` release matches Boot 3.5's logback (1.5.34), so it keeps the
+  `${logback.version}` pin and the README tells consumers to set the same `logback.version`. Drop the pin as soon as
+  a Boot 3.5.x / logback-access pair lines up again.
+- `logback-core`/`logback-classic` are `provided`: the app owns them.
 - A shared safety-net test (`LogbackVersionCompatibilityTest`) fails the build on a mismatch. It does **not**
   match the warning text (that wording is owned by logback-core and changes between versions, so a text match goes
   blind exactly when the mismatching core brings new wording). Instead it reads the expected logback-core version
@@ -74,16 +82,18 @@ diffs reviewable and prevents a fix landing in one starter but not the other.
 > [!WARNING]
 > Logback, logback-access, Spring Boot and the Tomcat major line are a tightly coupled set.
 > Bumping one without the others frequently breaks silently (a startup `WARN`, not a build failure).
-- **Never bump one in isolation.** `logback.version` and `logback-access.version` must move together.
-  After changing either, re-check the access jar's expected core version
-  (`ch/qos/logback/access/common/logback-access-common-dependencies.properties`) and align `logback.version` to it.
+- **Never bump one in isolation.** `logback-access.version` must move together with the logback version in use
+  (the Spring Boot BOM's in the Boot 4 starter, `logback.version` in the Boot 3 starter). After changing either,
+  re-check the access jar's expected core version
+  (`ch/qos/logback/access/common/logback-access-common-dependencies.properties`). A newer `logback-access` is not
+  better if it expects a core version Spring Boot doesn't ship.
 - **Patch bumps can break too.** logback-access pins an *exact* logback-core version; even a patch mismatch
   (e.g. `1.5.37` vs `1.5.38`) triggers the startup warning. Do not assume semver compatibility.
 - **Dependabot updates logback-core/classic independently.** PRs that bump only `logback.version`
   (or only `logback-access.version`) are the most common source of mismatch — scrutinise them and bump the pair.
 - **Spring Boot upgrades move Logback transitively.** When bumping `spring-boot.version`, the BOM may pull a
-  new logback-core; our `dependencyManagement` pin overrides it, so re-verify the pin still matches logback-access
-  rather than silently diverging from the BOM.
+  new logback-core. In the Boot 4 starter the safety-net test then fails until `logback-access.version` is moved
+  to the matching release; that failure is intended, since consumers on that Boot version would get the warning.
 - **Tomcat major must match the access artifact.** `logback-access-tomcat` targets a specific Tomcat major
   (10.x ↔ `tomcat.version` 10.1.x, 11.x ↔ 11.0.x). Keep `tomcat.version` on the matching line.
 - **Jackson major is starter-specific.** Boot 3 uses `com.fasterxml.jackson` (Jackson 2); Boot 4 uses

@@ -26,23 +26,38 @@ Dependency versions are read live from each starter's `pom.xml` (via shields.io,
 ![Spring Boot](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fraw.githubusercontent.com%2Ffelleslosninger%2Fidporten-access-log-spring-boot-starter%2Fmain%2Fidporten-access-log-spring-boot-3-starter%2Fpom.xml&query=%2F%2F%2A%5Blocal-name%28%29%3D%27spring-boot.version%27%5D&label=Spring+Boot&color=blue) ![logback](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fraw.githubusercontent.com%2Ffelleslosninger%2Fidporten-access-log-spring-boot-starter%2Fmain%2Fidporten-access-log-spring-boot-3-starter%2Fpom.xml&query=%2F%2F%2A%5Blocal-name%28%29%3D%27logback.version%27%5D&label=logback&color=blue) ![logback-access](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fraw.githubusercontent.com%2Ffelleslosninger%2Fidporten-access-log-spring-boot-starter%2Fmain%2Fidporten-access-log-spring-boot-3-starter%2Fpom.xml&query=%2F%2F%2A%5Blocal-name%28%29%3D%27logback-access.version%27%5D&label=logback-access&color=blue) ![tomcat](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fraw.githubusercontent.com%2Ffelleslosninger%2Fidporten-access-log-spring-boot-starter%2Fmain%2Fidporten-access-log-spring-boot-3-starter%2Fpom.xml&query=%2F%2F%2A%5Blocal-name%28%29%3D%27tomcat.version%27%5D&label=tomcat&color=blue)
 
 **Spring Boot 4 starter**  
-![Spring Boot](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fraw.githubusercontent.com%2Ffelleslosninger%2Fidporten-access-log-spring-boot-starter%2Fmain%2Fidporten-access-log-spring-boot-4-starter%2Fpom.xml&query=%2F%2F%2A%5Blocal-name%28%29%3D%27spring-boot.version%27%5D&label=Spring+Boot&color=blue) ![logback](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fraw.githubusercontent.com%2Ffelleslosninger%2Fidporten-access-log-spring-boot-starter%2Fmain%2Fidporten-access-log-spring-boot-4-starter%2Fpom.xml&query=%2F%2F%2A%5Blocal-name%28%29%3D%27logback.version%27%5D&label=logback&color=blue) ![logback-access](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fraw.githubusercontent.com%2Ffelleslosninger%2Fidporten-access-log-spring-boot-starter%2Fmain%2Fidporten-access-log-spring-boot-4-starter%2Fpom.xml&query=%2F%2F%2A%5Blocal-name%28%29%3D%27logback-access.version%27%5D&label=logback-access&color=blue) ![tomcat](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fraw.githubusercontent.com%2Ffelleslosninger%2Fidporten-access-log-spring-boot-starter%2Fmain%2Fidporten-access-log-spring-boot-4-starter%2Fpom.xml&query=%2F%2F%2A%5Blocal-name%28%29%3D%27tomcat.version%27%5D&label=tomcat&color=blue)
+![Spring Boot](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fraw.githubusercontent.com%2Ffelleslosninger%2Fidporten-access-log-spring-boot-starter%2Fmain%2Fidporten-access-log-spring-boot-4-starter%2Fpom.xml&query=%2F%2F%2A%5Blocal-name%28%29%3D%27spring-boot.version%27%5D&label=Spring+Boot&color=blue) ![logback-access](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fraw.githubusercontent.com%2Ffelleslosninger%2Fidporten-access-log-spring-boot-starter%2Fmain%2Fidporten-access-log-spring-boot-4-starter%2Fpom.xml&query=%2F%2F%2A%5Blocal-name%28%29%3D%27logback-access.version%27%5D&label=logback-access&color=blue) ![tomcat](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fraw.githubusercontent.com%2Ffelleslosninger%2Fidporten-access-log-spring-boot-starter%2Fmain%2Fidporten-access-log-spring-boot-4-starter%2Fpom.xml&query=%2F%2F%2A%5Blocal-name%28%29%3D%27tomcat.version%27%5D&label=tomcat&color=blue)
 
 ## Compatibility and upgrading
-Each starter pins a `logback-core`/`logback-classic` version that matches its bundled `logback-access`
-(logback-access performs a version check at startup and logs a warning on a mismatch; depending on the
-`logback-core` version on the classpath it reads `For logback-core, expected version X but found Y` or
-`Depender [logback-access-common] was expecting version X for dependency [logback-core] but found version Y`).
+`logback-access` expects one exact `logback-core` version and logs a warning at startup if the classpath has
+another one. Depending on the `logback-core` version the warning reads
+`For logback-core, expected version X but found Y` or
+`Depender [logback-access-common] was expecting version X for dependency [logback-core] but found version Y`.
 
-To upgrade safely:
-* Prefer bumping the starter version — it brings a known-compatible Logback + logback-access set.
-* If you override Logback yourself, keep `logback-core` and `logback-classic` on the version expected by your
-  `logback-access` version, and verify startup logs are free of the version-mismatch warning above.
+The starter can't choose your `logback-core`/`logback-classic` version. Your Spring Boot BOM does that
+(`spring-boot-starter-parent` or `spring-boot-dependencies`). A library's `dependencyManagement` does not reach
+consumers, and a BOM you import can't override versions your Spring Boot parent already manages. So each starter
+ships the `logback-access` release that matches its Spring Boot line:
 
-A safety-net test (`LogbackVersionCompatibilityTest`) runs in both starters and fails the build on a mismatch,
-so mismatches are caught before release. It compares the `logback-core` version expected by `logback-access` with
-the one actually on the classpath (independent of the warning's wording) and also fails on any version-related
-warning the valve records at startup.
+* **`idporten-access-log-spring-boot-4-starter`**: logback comes from your Spring Boot BOM, no override needed,
+  as long as you use the Spring Boot version the starter is built with (see badges above).
+* **`idporten-access-log-spring-boot-3-starter`**: no `logback-access` release matches the logback managed by
+  Spring Boot 3.5.x, so you must set `logback.version` to the starter's version (see badge above) and move it
+  each time you bump the starter:
+  ```xml
+  <properties>
+      <logback.version>1.5.38</logback.version>
+  </properties>
+  ```
+
+If you use another Spring Boot version than the starter, check the startup log for the warning above.
+If it shows up, set `logback.version` to the version in the warning (`expected version X`).
+
+A safety-net test (`LogbackVersionCompatibilityTest`) runs in both starters and fails the build on a mismatch.
+In the Boot 4 starter, logback comes from the Spring Boot BOM exactly as for a consumer, so the test checks what
+consumers actually get. It compares the `logback-core` version expected by `logback-access` with the one on the
+classpath (independent of the warning's wording) and also fails on any version-related warning the valve records
+at startup.
 
 ## Build library
 

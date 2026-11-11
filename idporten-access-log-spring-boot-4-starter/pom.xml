@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>idporten-access-log-spring-boot-4-starter</artifactId>
-    <name>idporten-access-log-spring-boot-4-starter (${spring-boot.version}) + logback:${logback.version} + logback-access:${logback-access.version}</name>
+    <name>idporten-access-log-spring-boot-4-starter (${spring-boot.version}) + logback:(from Spring Boot BOM) + logback-access:${logback-access.version}</name>
 
     <parent>
         <groupId>no.idporten.logging</groupId>
@@ -18,18 +18,20 @@
 
      Even when upgrading **patch versions** of these components, might break compatibility.
 
-     WARNING: logback.version and logback-access.version must move TOGETHER. logback-access pins an
-     exact logback-core version and logs a startup WARN ("For logback-core, expected version X but found Y")
-     on any mismatch - this is NOT a build failure, so it is easy to miss. Scrutinise Dependabot PRs that
-     bump only one of them. Keep tomcat.version on the Tomcat major the access artifact targets.
-     See AGENTS.md ("Logback upgrade - pitfalls") and let LogbackVersionCompatibilityTest be the gate.
+     WARNING: this starter does NOT pin logback-core/classic. Consumers get logback from their own Spring Boot
+     BOM, so the build uses the same (Spring Boot BOM) version, and logback-access.version must be the release
+     that expects exactly that logback-core version. logback-access logs a startup WARN on any mismatch -
+     this is NOT a build failure, so it is easy to miss. Scrutinise Dependabot PRs that bump
+     logback-access.version or spring-boot.version alone. Keep tomcat.version on the Tomcat major the access
+     artifact targets. See AGENTS.md ("Logback upgrade - pitfalls") and let LogbackVersionCompatibilityTest
+     be the gate.
      -->
     <properties>
         <spring-boot.version>4.1.1</spring-boot.version>
-        <jackson-bom.version>3.2.3</jackson-bom.version>
+        <jackson-bom.version>3.2.4</jackson-bom.version>
         <logstash-logback-encoder.version>9.0</logstash-logback-encoder.version>
-        <logback-access.version>2.0.15</logback-access.version>
-        <logback.version>1.6.3</logback.version>
+        <!-- 2.0.13 expects logback-core 1.5.38, the version managed by Spring Boot 4.1.x -->
+        <logback-access.version>2.0.13</logback-access.version>
         <tomcat.version>11.0.26</tomcat.version>
         <argLine />
     </properties>
@@ -52,21 +54,12 @@
                 <scope>import</scope>
             </dependency>
 
-            <!-- Logback family, pinned to stay compatible with logback-access (see startup version check):
-                 - logback-core/classic ARE managed by the Spring Boot BOM; we pin to OVERRIDE the BOM so the
-                   version exactly matches the logback-core that logback-access expects (avoids the startup
-                   "For logback-core, expected version X but found Y" warning).
-                 - logback-access-tomcat is NOT managed by the Spring Boot BOM, so it must be pinned here. -->
-            <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-core</artifactId>
-                <version>${logback.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-classic</artifactId>
-                <version>${logback.version}</version>
-            </dependency>
+            <!-- Logback family (see startup version check):
+                 - logback-core/classic are deliberately NOT pinned. A library's dependencyManagement is not
+                   inherited by consumers, whose Spring Boot BOM decides their logback version. Leaving them to
+                   the Spring Boot BOM makes the build/tests run with the version a consumer actually gets.
+                 - logback-access-tomcat is NOT managed by the Spring Boot BOM, so it must be pinned here, to the
+                   release that expects the Spring Boot BOM's logback-core version. -->
             <dependency>
                 <groupId>ch.qos.logback.access</groupId>
                 <artifactId>logback-access-tomcat</artifactId>
